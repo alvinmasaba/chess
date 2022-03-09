@@ -7,21 +7,16 @@ class GameBoard
   def initialize
     # Unicode space will occupy the same space as a chess piece, maintaining
     # the size of the board when drawn.
-    @board = Array.new(8) { Array.new(8, "\u0020") } 
+    @board = Array.new(8) { Array.new(8, "\u0020") }
   end
 
-  def display_board(board)
+  def display_board
     separator = Array.new(8 + 1, '+').join('---')
 
     board.each do |row|
-      i = 0
-
       puts separator
 
-      while i < 8
-        print "| #{row[i]} "
-        i += 1
-      end
+      row.each { |i| print "| #{row[i]} " }
 
       print '|'
       print "\n"

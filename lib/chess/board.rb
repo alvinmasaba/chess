@@ -5,7 +5,9 @@ class Board
   attr_accessor :board
 
   def initialize
-    @board = Array.new(8) { Array.new(8) {''} }
+    # Unicode space will occupy the same space as a chess piece, maintaining
+    # the size of the board when drawn.
+    @board = Array.new(8) { Array.new(8, "\u0020") } 
   end
 
   def display_board(board)
@@ -17,7 +19,7 @@ class Board
       puts separator
 
       while i < 8
-        print "| #{row[i]}  "
+        print "| #{row[i]} "
         i += 1
       end
 

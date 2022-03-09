@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Creates a playable chess board
-class Board
+class GameBoard
   attr_accessor :board
 
   def initialize

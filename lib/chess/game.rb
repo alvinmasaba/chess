@@ -5,4 +5,5 @@ require_relative 'piece.rb'
 require_relative 'player.rb'
 
 # Plays a complete game of chess
-class Game end
+class Game
+end

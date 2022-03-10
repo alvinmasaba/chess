@@ -11,16 +11,20 @@ class GamePiece
   end
 
   def move(dest)
-    return nil unless valid_pos?(dest)
+    if valid_pos?(dest)
+      @position = dest
+    else
+      puts 'Invalid move.'
+    end
   end
 
   private
 
-  def valid_pos?(position)
+  def valid_pos?(pos)
     # A valid position is a string of length 2, starting with a letter between
     # A and H and ending with an integer between 1 and 8 (inclusive).
-    return false unless position.size == 2
+    return false unless pos.size == 2
 
-    /[A-Ha-h][1-8]/.match?(position)
+    /[A-Ha-h][1-8]/.match?(pos)
   end
 end

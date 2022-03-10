@@ -2,11 +2,9 @@
 
 # Creates a movable chess piece
 class GamePiece
-  attr_accessor :color, :player, :transformations, :position
+  attr_accessor :position
 
-  def initialize(color, player, position)
-    @color = color
-    @player = player
+  def initialize(position)
     @position = position
   end
 
@@ -21,10 +19,23 @@ class GamePiece
   private
 
   def valid_pos?(pos)
-    # A valid position is a string of length 2, starting with a letter between
-    # A and H and ending with an integer between 1 and 8 (inclusive).
+    # A valid position is a string of length 2.
     return false unless pos.size == 2
 
-    /[A-Ha-h][1-8]/.match?(pos)
+    # It starts with a letter between A and H and ends
+    # with an integer between 1 and 8 and cannot be its
+    # own position.
+    /[A-Ha-h][1-8]/.match?(pos) && pos != position
+  end
+end
+
+# Creates a game piece which moves like a Rook
+class Rook < GamePiece
+  def valid_pos?(pos)
+    # For a rook, a valid position shares either the same letter or number index
+    # as the original position. E.g. 'A1' to 'A9' or 'A3' to 'D3'.
+    return false unless super
+
+    position[0].match?(pos[0]) || position[1].match?(pos[1])
   end
 end

@@ -4,6 +4,9 @@
 class GamePiece
   attr_accessor :position
 
+  ALPHA_TO_NUM = { 'a': 1, 'b': 2, 'c': 3, 'd': 4,
+                   'e': 5, 'f': 6, 'g': 7, 'h': 8 }.freeze
+
   def initialize(position)
     @position = position
   end
@@ -38,4 +41,8 @@ class Rook < GamePiece
 
     position[0].match?(pos[0]) || position[1].match?(pos[1])
   end
+end
+
+# Creates a game piece which moves like a Bishop
+class Bishop < GamePiece
 end

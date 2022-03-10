@@ -59,3 +59,10 @@ describe Rook do
     end
   end
 end
+
+describe Bishop do
+  subject(:bishop_move) { described_class.new('G4') }
+
+  describe '#valid_pos?' do
+  end
+end

@@ -15,5 +15,12 @@ describe GamePiece do
         expect { game_piece.move(valid_pos) }.to change { game_piece.position }.from(og_pos).to(valid_pos)
       end
     end
+
+    context 'when an invalid position is entered' do
+      it ' does not change its position' do
+        og_pos = game_piece.position
+        expect { game_piece.move(valid_pos) }.to_not change { game_piece.position }.from(og_pos).to(valid_pos)
+      end
+    end
   end
 end

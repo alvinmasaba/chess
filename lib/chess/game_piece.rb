@@ -6,7 +6,7 @@ require_relative 'chess_helpers'
 class GamePiece
   include Helpers
 
-  attr_accessor :position
+  attr_accessor :position, :color
 
   def initialize(position, color = 'white')
     @position = position
@@ -36,6 +36,14 @@ end
 
 # Creates a game piece which moves like a Rook
 class Rook < GamePiece
+  attr_accessor :symbol, :first_move
+
+  def initialize(position, color = 'white', symbol = ["\u2656", "\u265C"])
+    super
+    @symbol = symbol
+    @first_move = true
+  end
+
   def valid_pos?(pos)
     # For a rook, a valid position shares either the same letter or number index
     # as the original position. E.g. 'A1' to 'A9' or 'A3' to 'D3'.
@@ -47,6 +55,13 @@ end
 
 # Creates a game piece which moves like a Bishop
 class Bishop < GamePiece
+  attr_accessor :symbol
+
+  def initialize(position, color = 'white', symbol = ["\u2657", "\u265D"])
+    super
+    @symbol = symbol
+  end
+
   def valid_pos?(pos)
     return false unless super
 
@@ -59,6 +74,13 @@ end
 
 # Creates a game piece which moves like a Knight
 class Knight < GamePiece
+  attr_accessor :symbol
+
+  def initialize(position, color = 'white', symbol = ["\u2658", "\u265E"])
+    super
+    @symbol = symbol
+  end
+
   def valid_pos?(pos)
     return false unless super
 
@@ -71,6 +93,13 @@ end
 
 # Creates a game piece which moves like a Knight
 class Queen < GamePiece
+  attr_accessor :symbol
+
+  def initialize(position, color = 'white', symbol = ["\u2655", "\u265B"])
+    super
+    @symbol = symbol
+  end
+
   def valid_pos?(pos)
     return false unless super
 
@@ -87,7 +116,13 @@ end
 
 # Creates a game piece which moves like a King
 class King < GamePiece
-  attr_accessor :symbol
+  attr_accessor :symbol, :first_move
+
+  def initialize(position, color = 'white', symbol = ["\u2654", "\u265A"])
+    super
+    @symbol = symbol
+    @first_move = true
+  end
 
   def valid_pos?(pos)
     return false unless super
@@ -100,10 +135,11 @@ end
 
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
-  attr_accessor :first_move
+  attr_accessor :symbol, :first_move
 
-  def initialize(position, color = 'white')
+  def initialize(position, color = 'white', symbol = ["\u2659", "\u265F"])
     super
+    @symbol = symbol
     @first_move = true
   end
 

@@ -6,16 +6,20 @@ require_relative 'chess_helpers'
 class GamePiece
   include Helpers
 
-  attr_accessor :position, :color
+  attr_accessor :position, :color, :symbol, :first_move
 
-  def initialize(position, color = 'white')
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2659", 'black': "\u265F" })
     @position = position
     @color = color
+    @symbol = symbol[color]
+    @first_move = true
   end
 
   def move(dest)
     if valid_pos?(dest)
       @position = dest
+      @first_move = false
     else
       puts 'Invalid move.'
     end
@@ -36,12 +40,9 @@ end
 
 # Creates a game piece which moves like a Rook
 class Rook < GamePiece
-  attr_accessor :symbol, :first_move
-
-  def initialize(position, color = 'white', symbol = ["\u2656", "\u265C"])
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2656", 'black': "\u265C" })
     super
-    @symbol = symbol
-    @first_move = true
   end
 
   def valid_pos?(pos)
@@ -55,11 +56,9 @@ end
 
 # Creates a game piece which moves like a Bishop
 class Bishop < GamePiece
-  attr_accessor :symbol
-
-  def initialize(position, color = 'white', symbol = ["\u2657", "\u265D"])
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2657", 'black': "\u265D" })
     super
-    @symbol = symbol
   end
 
   def valid_pos?(pos)
@@ -74,11 +73,9 @@ end
 
 # Creates a game piece which moves like a Knight
 class Knight < GamePiece
-  attr_accessor :symbol
-
-  def initialize(position, color = 'white', symbol = ["\u2658", "\u265E"])
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2658", 'black': "\u265E" })
     super
-    @symbol = symbol
   end
 
   def valid_pos?(pos)
@@ -93,11 +90,9 @@ end
 
 # Creates a game piece which moves like a Knight
 class Queen < GamePiece
-  attr_accessor :symbol
-
-  def initialize(position, color = 'white', symbol = ["\u2655", "\u265B"])
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2655", 'black': "\u265B" })
     super
-    @symbol = symbol
   end
 
   def valid_pos?(pos)
@@ -116,12 +111,9 @@ end
 
 # Creates a game piece which moves like a King
 class King < GamePiece
-  attr_accessor :symbol, :first_move
-
-  def initialize(position, color = 'white', symbol = ["\u2654", "\u265A"])
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2654", 'black': "\u265A" })
     super
-    @symbol = symbol
-    @first_move = true
   end
 
   def valid_pos?(pos)
@@ -135,21 +127,9 @@ end
 
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
-  attr_accessor :symbol, :first_move
-
-  def initialize(position, color = 'white', symbol = ["\u2659", "\u265F"])
+  def initialize(position, color = :white,
+                 symbol = { 'white': "\u2659", 'black': "\u265F" })
     super
-    @symbol = symbol
-    @first_move = true
-  end
-
-  def move(dest)
-    if valid_pos?(dest)
-      @position = dest
-      @first_move = false
-    else
-      puts 'Invalid move.'
-    end
   end
 
   def valid_pos?(pos)

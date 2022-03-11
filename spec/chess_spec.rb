@@ -87,7 +87,6 @@ describe Pawn do
   end
 end
 
-
 describe Rook do
   subject(:rook_move) { described_class.new('D5') }
 
@@ -250,4 +249,3 @@ describe King do
     end
   end
 end
-

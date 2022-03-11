@@ -155,3 +155,44 @@ describe Queen do
   end
 end
 
+describe King do
+  subject(:king_move) { described_class.new('G7') }
+
+  describe '#valid_pos?' do
+    valid_horizontal = 'F7'
+    valid_diagonal = 'H6'
+    valid_vertical = 'G8'
+    invalid_pos = 'E7'
+
+    context 'when a valid horizontal position is entered' do
+      it 'returns true' do
+        expect(king_move.valid_pos?(valid_horizontal)).to be_truthy
+      end
+    end
+
+    context 'when a valid vertical position is entered' do
+      it 'returns true' do
+        expect(king_move.valid_pos?(valid_vertical)).to be_truthy
+      end
+    end
+
+    context 'when a valid diagonal position is entered' do
+      it 'returns true' do
+        expect(king_move.valid_pos?(valid_diagonal)).to be_truthy
+      end
+    end
+
+    context 'when an invalid position is entered' do
+      it 'returns false' do
+        expect(king_move.valid_pos?(invalid_pos)).to_not be_truthy
+      end
+    end
+
+    context 'when its current position is entered' do
+      it 'returns false' do
+        expect(king_move.valid_pos?(king_move.position)).to_not be_truthy
+      end
+    end
+  end
+end
+

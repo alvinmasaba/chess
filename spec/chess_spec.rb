@@ -36,13 +36,40 @@ end
 describe Pawn do
   subject(:pawn_move) { described_class.new('B1') }
 
-  describe '#valid_pos?' do
-    valid_pos = 'B2'
-    invalid_pos = 'C1'
+  valid_pos = 'B2'
+  valid_first_move = 'B3'
+  invalid_pos = 'C1'
 
+  describe '#move' do
+    context 'when a valid position is entered and first_move is true' do
+      before do
+        allow(pawn_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
+      end
+
+      it 'changes first_move to false' do
+        expect { pawn_move.move(valid_pos) }.to change { pawn_move.first_move }.from(true).to(false)
+      end
+    end
+  end
+
+  describe '#valid_pos?' do
     context 'when a valid position is entered' do
       it 'returns true' do
         expect(pawn_move.valid_pos?(valid_pos)).to be_truthy
+      end
+    end
+
+    context 'when first_move is true and the move is two spaces away vertically' do
+      it 'returns true' do
+        pawn_move.first_move = true
+        expect(pawn_move.valid_pos?(valid_first_move)).to be_truthy
+      end
+    end
+
+    context 'when first_move is false and the move is two spaces away vertically' do
+      it 'returns false' do
+        pawn_move.first_move = false
+        expect(pawn_move.valid_pos?(valid_first_move)).to_not be_truthy
       end
     end
 

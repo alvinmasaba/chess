@@ -8,8 +8,9 @@ class GamePiece
 
   attr_accessor :position
 
-  def initialize(position)
+  def initialize(position, color = 'white')
     @position = position
+    @color = color
   end
 
   def move(dest)
@@ -86,6 +87,8 @@ end
 
 # Creates a game piece which moves like a King
 class King < GamePiece
+  attr_accessor :symbol
+
   def valid_pos?(pos)
     return false unless super
 
@@ -97,8 +100,29 @@ end
 
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
+  attr_accessor :first_move
+
+  def initialize(position, color = 'white')
+    super
+    @first_move = true
+  end
+
+  def move(dest)
+    if valid_pos?(dest)
+      @position = dest
+      @first_move = false
+    else
+      puts 'Invalid move.'
+    end
+  end
+
   def valid_pos?(pos)
     coord = convert_to_coordinates(position, pos)
-    coord == [0, 1]
+
+    if first_move
+      [[0, 1], [0, 2]].include?(coord)
+    else
+      coord == [0, 1]
+    end
   end
 end

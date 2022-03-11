@@ -83,3 +83,19 @@ class Knight < GamePiece
     result.include?(1) && result.include?(2)
   end
 end
+
+# Creates a game piece which moves like a Knight
+class Queen < GamePiece
+  def valid_pos?(pos)
+    return false unless super
+
+    coord = convert_to_coordinates(pos)
+
+    # Queen movement is a combination of Rook and Bishop movement
+    if position[0].match?(pos[0]) || position[1].match?(pos[1])
+      true
+    else
+      (coord[0] - coord[1]).abs == (coord[2] - coord[3]).abs
+    end
+  end
+end

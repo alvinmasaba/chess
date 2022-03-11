@@ -113,3 +113,45 @@ describe Knight do
     end
   end
 end
+
+describe Queen do
+  subject(:queen_move) { described_class.new('C1') }
+
+  describe '#valid_pos?' do
+    valid_horizontal = 'H1'
+    valid_diagonal = 'F4'
+    valid_vertical = 'C7'
+    invalid_pos = 'H2'
+
+    context 'when a valid horizontal position is entered' do
+      it 'returns true' do
+        expect(queen_move.valid_pos?(valid_horizontal)).to be_truthy
+      end
+    end
+
+    context 'when a valid vertical position is entered' do
+      it 'returns true' do
+        expect(queen_move.valid_pos?(valid_vertical)).to be_truthy
+      end
+    end
+
+    context 'when a valid diagonal position is entered' do
+      it 'returns true' do
+        expect(queen_move.valid_pos?(valid_diagonal)).to be_truthy
+      end
+    end
+
+    context 'when an invalid position is entered' do
+      it 'returns false' do
+        expect(queen_move.valid_pos?(invalid_pos)).to_not be_truthy
+      end
+    end
+
+    context 'when its current position is entered' do
+      it 'returns false' do
+        expect(queen_move.valid_pos?(queen_move.position)).to_not be_truthy
+      end
+    end
+  end
+end
+

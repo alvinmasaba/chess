@@ -94,3 +94,11 @@ class King < GamePiece
     coord.all? { |val| val.between?(0, 1) }
   end
 end
+
+# Creates a game piece which moves like a King
+class Pawn < GamePiece
+  def valid_pos?(pos)
+    coord = convert_to_coordinates(position, pos)
+    coord == [0, 1]
+  end
+end

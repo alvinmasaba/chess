@@ -33,6 +33,34 @@ describe GamePiece do
   end
 end
 
+describe Pawn do
+  subject(:pawn_move) { described_class.new('B1') }
+
+  describe '#valid_pos?' do
+    valid_pos = 'B2'
+    invalid_pos = 'C1'
+
+    context 'when a valid position is entered' do
+      it 'returns true' do
+        expect(pawn_move.valid_pos?(valid_pos)).to be_truthy
+      end
+    end
+
+    context 'when an invalid position is entered' do
+      it 'returns false' do
+        expect(pawn_move.valid_pos?(invalid_pos)).to_not be_truthy
+      end
+    end
+
+    context 'when its current position is entered' do
+      it 'returns false' do
+        expect(pawn_move.valid_pos?(pawn_move.position)).to_not be_truthy
+      end
+    end
+  end
+end
+
+
 describe Rook do
   subject(:rook_move) { described_class.new('D5') }
 

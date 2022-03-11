@@ -86,3 +86,30 @@ describe Bishop do
     end
   end
 end
+
+describe Knight do
+  subject(:knight_move) { described_class.new('E5') }
+
+  describe '#valid_pos?' do
+    valid_pos = 'C6'
+    invalid_pos = 'A1'
+
+    context 'when a valid position is entered' do
+      it 'returns true' do
+        expect(knight_move.valid_pos?(valid_pos)).to be_truthy
+      end
+    end
+
+    context 'when an invalid position is entered' do
+      it 'returns false' do
+        expect(knight_move.valid_pos?(invalid_pos)).to_not be_truthy
+      end
+    end
+
+    context 'when its current position is entered' do
+      it 'returns false' do
+        expect(knight_move.valid_pos?(knight_move.position)).to_not be_truthy
+      end
+    end
+  end
+end

@@ -10,24 +10,25 @@ describe GamePiece do
     invalid_pos = 'A9'
 
     context 'when a valid position is entered' do
+      before do
+        allow(game_piece).to receive(:gets).and_return(valid_pos)
+      end
+
       it 'position changes to the entered position' do
         og_pos = game_piece.position
-        expect { game_piece.move(valid_pos) }.to change { game_piece.position }.from(og_pos).to(valid_pos)
+        expect { game_piece.move }.to change { game_piece.position }.from(og_pos).to(valid_pos)
       end
     end
 
-    context 'when an invalid position is entered' do
-      it 'does not change its position' do
-        og_pos = game_piece.position
-        game_piece.move(invalid_pos)
-        expect(game_piece.position).to eql(og_pos)
+    context 'when an invalid position is entered twice' do
+      before do
+        allow(game_piece).to receive(:puts)
+        allow(game_piece).to receive(:gets).and_return(invalid_pos, invalid_pos, valid_pos)
       end
-    end
 
-    context 'when an invalid position is entered' do
-      it 'puts an error message' do
-        expect(game_piece).to receive(:puts).with('Invalid move.')
-        game_piece.move(invalid_pos)
+      it 'puts an error message twice' do
+        expect(game_piece).to receive(:puts).with('Invalid move.').twice
+        game_piece.move
       end
     end
   end
@@ -43,11 +44,12 @@ describe Pawn do
   describe '#move' do
     context 'when a valid position is entered and first_move is true' do
       before do
+        allow(pawn_move).to receive(:gets).and_return(valid_pos)
         allow(pawn_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
       end
 
       it 'changes first_move to false' do
-        expect { pawn_move.move(valid_pos) }.to change { pawn_move.first_move }.from(true).to(false)
+        expect { pawn_move.move }.to change { pawn_move.first_move }.from(true).to(false)
       end
     end
   end

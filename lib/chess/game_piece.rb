@@ -16,12 +16,18 @@ class GamePiece
     @first_move = true
   end
 
-  def move(dest)
-    if valid_pos?(dest)
-      @position = dest
+  def move
+    puts "\nEnter the coordinates of your move starting with the column.
+          E.g. 'A1'."
+
+    destination = gets.chomp
+
+    if valid_pos?(destination)
+      @position = destination
       @first_move = false
     else
       puts 'Invalid move.'
+      move
     end
   end
 

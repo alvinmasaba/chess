@@ -20,8 +20,8 @@ module Helpers
     [(x1 - x2).abs, (y1 - y2).abs]
   end
 
-  def enter_name
-    puts "\nPlease enter a name. Your name may be up to 10 chars max.\n\n"
+  def enter_name(name)
+    puts "\n#{name} please enter a name. Your name may be up to 10 chars max.\n\n"
     new_name = gets.chomp
 
     if /\S/.match(new_name) && new_name.size.between?(1, 10)

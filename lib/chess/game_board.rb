@@ -32,16 +32,14 @@ class GameBoard
 
   def display_board
     separator = Array.new(8 + 1, '+').join('---')
+    puts "\n"
 
     board.each do |row|
       puts separator
 
       row.each_with_index do |piece, i|
-        if piece == "\u0020"
-          print "| #{row[i]} "
-        else
-          print "| #{piece.symbol} "
-        end
+        piece = piece == "\u0020" ? row[i] : piece.symbol
+        print "| #{piece} "
       end
 
       print '|'
@@ -58,18 +56,11 @@ class GameBoard
     new_board = []
 
     temp_board.each_with_index do |_, i|
-      case i
-      when 0
-        new_board << BLACK
-      when 1
-        new_board << BLACK_PAWN
-      when 6
-        new_board << WHITE_PAWN
-      when 7
-        new_board << WHITE
-      else
-        new_board << Array.new(8, "\u0020")
-      end
+      new_board << BLACK if i.zero?
+      new_board << BLACK_PAWN if i == 1
+      new_board << WHITE_PAWN if i == 6
+      new_board << WHITE if i == 7
+      new_board << Array.new(8, "\u0020") if i.between?(2, 5)
     end
 
     new_board

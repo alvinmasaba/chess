@@ -30,4 +30,21 @@ module Helpers
       enter_name
     end
   end
+
+  def find_piece(position, board)
+    # If the string entered is in the format '[letter][integer]', convert
+    # to corresponding index in gameboard array. E.g. 'A1' == [0][0].
+    piece = [convert_to_num(position[0]) - 1, position[1].to_i - 1]
+    board[piece[0]][piece[1]]
+  end
+
+  def valid_pos?(pos)
+    # A valid position is a string of length 2.
+    return false unless pos.size == 2
+
+    # It starts with a letter between A and H and ends
+    # with an integer between 1 and 8 and cannot be its
+    # own position.
+    /[A-Ha-h][1-8]/.match?(pos)
+  end
 end

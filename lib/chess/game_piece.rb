@@ -17,8 +17,8 @@ class GamePiece
   end
 
   def move
-    puts "\nEnter the coordinates of your move starting with the column.
-          E.g. 'A1'."
+    puts "\nEnter the coordinates of the piece you would like to move
+          starting with the column. E.g. 'A1'."
 
     destination = gets.chomp
 
@@ -34,13 +34,7 @@ class GamePiece
   private
 
   def valid_pos?(pos)
-    # A valid position is a string of length 2.
-    return false unless pos.size == 2
-
-    # It starts with a letter between A and H and ends
-    # with an integer between 1 and 8 and cannot be its
-    # own position.
-    /[A-Ha-h][1-8]/.match?(pos) && pos != position
+    super && pos != position
   end
 end
 

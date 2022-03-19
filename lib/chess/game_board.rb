@@ -65,4 +65,10 @@ class GameBoard
 
     new_board
   end
+
+  private
+
+  def update_board
+    
+  end
 end

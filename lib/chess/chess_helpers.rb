@@ -10,13 +10,14 @@ module Helpers
     ALPHA_TO_NUM[string.downcase.to_sym]
   end
 
-  def convert_to_coordinates(pos, dest)
+  def change_in_coordinates(pos, dest)
     # Convert pos and dest to wholy numeric coordinates.
     x1 = convert_to_num(pos[0])
     y1 = pos[1].to_i
     x2 = convert_to_num(dest[0])
     y2 = dest[1].to_i
 
+    # Return the change in x and the change in y.
     [(x1 - x2).abs, (y1 - y2).abs]
   end
 
@@ -46,5 +47,9 @@ module Helpers
     # with an integer between 1 and 8 and cannot be its
     # own position.
     /[A-Ha-h][1-8]/.match?(pos)
+  end
+
+  def color_match?(color1, color2)
+    color1 == color2
   end
 end

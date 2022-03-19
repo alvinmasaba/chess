@@ -66,8 +66,8 @@ class Bishop < GamePiece
 
     # A valid position is the same absolute distance removed from the origin on
     # both the x and y axis. E.g. [2,-2], [-5,5], [-1,-1], [3,3].
-    coord = convert_to_coordinates(position, pos)
-    coord[0] == coord[1]
+    change = change_in_coordinates(position, pos)
+    change[0] == change[1]
   end
 end
 
@@ -83,8 +83,8 @@ class Knight < GamePiece
 
     # A valid position has an absolute distance removed of either [1, 2]
     # or [2, 1] in terms of x and y.
-    coord = convert_to_coordinates(position, pos)
-    coord.include?(1) && coord.include?(2)
+    change = change_in_coordinates(position, pos)
+    change.include?(1) && change.include?(2)
   end
 end
 
@@ -98,13 +98,13 @@ class Queen < GamePiece
   def valid_pos?(pos)
     return false unless super
 
-    coord = convert_to_coordinates(position, pos)
+    change = change_in_coordinates(position, pos)
 
     # Queen movement is a combination of Rook and Bishop movement
     if position[0].match?(pos[0]) || position[1].match?(pos[1])
       true
     else
-      coord[0] == coord[1]
+      change[0] == change[1]
     end
   end
 end
@@ -120,8 +120,8 @@ class King < GamePiece
     return false unless super
 
     # A King can move at most 1 space in any direction.
-    coord = convert_to_coordinates(position, pos)
-    coord.all? { |val| val.between?(0, 1) }
+    change = change_in_coordinates(position, pos)
+    change.all? { |val| val.between?(0, 1) }
   end
 end
 
@@ -133,12 +133,12 @@ class Pawn < GamePiece
   end
 
   def valid_pos?(pos)
-    coord = convert_to_coordinates(position, pos)
+    change = change_in_coordinates(position, pos)
 
     if first_move
-      [[0, 1], [0, 2]].include?(coord)
+      [[0, 1], [0, 2]].include?(change)
     else
-      coord == [0, 1]
+      change == [0, 1]
     end
   end
 end

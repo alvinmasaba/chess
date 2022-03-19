@@ -3,9 +3,10 @@
 require './lib/chess/game_piece'
 require './lib/chess/game'
 
-describe Game do
-  subject(:game_move) { described_class.new }
-  let(:game_piece) { instance_double(GamePiece, color: :white) }
+describe Player do
+  subject(:player_move) { described_class.new('Player 1', :white) }
+  let(:game_board) { instance_double(GameBoard) }
+  let(:player_piece) { instance_double(GamePiece, color: :white) }
   let(:opp_piece) { instance_double(GamePiece, color: :black) }
 
   # A method that can select a GamePiece at a specific position
@@ -16,38 +17,40 @@ describe Game do
 
     context 'when a valid position is entered' do
       before do
-        allow(game_move).to receive(:gets).and_return(valid_pos)
-        allow(game_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
-        allow(game_move).to receive(:find_piece).with(valid_pos, game_move.board).and_return(game_piece)
+        allow(player_move).to receive(:gets).and_return(valid_pos)
+        allow(player_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
+        allow(player_move).to receive(:find_piece).with(valid_pos, game_board).and_return(player_piece)
       end
       it 'changes :selected_piece to the GamePiece at that board position' do
-        expect { game_move.select_piece }.to change { game_move.selected_piece }.from(nil).to(game_piece)
+        expect { player_move.select_piece(game_board) }.to change { player_move.selected_piece }.from(nil).to(player_piece)
       end
     end
 
     context 'when an invalid position is entered twice' do
       before do
-        allow(game_move).to receive(:gets).and_return(invalid_pos, invalid_pos, valid_pos)
-        allow(game_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
-        allow(game_move).to receive(:find_piece).with(valid_pos, game_move.board).and_return(game_piece)
+        allow(player_move).to receive(:gets).and_return(invalid_pos, invalid_pos, valid_pos)
+        allow(player_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
+        allow(player_move).to receive(:find_piece).with(valid_pos, game_board).and_return(player_piece)
       end
 
       it 'calls valid_board_pos? 3 times' do
-        expect(game_move).to receive(:valid_pos?).exactly(3).times
-        game_move.select_piece
+        expect(player_move).to receive(:valid_pos?).exactly(3).times
+        player_move.select_piece(game_board)
       end
     end
 
     context 'when an opponents piece is selected' do
       before do
-        allow(game_move).to receive(:gets).and_return(opp_pos, opp_pos, valid_pos)
-        allow(game_move).to receive(:valid_pos?).and_return(true, true, true)
-        allow(game_move).to receive(:color_match?).and_return(false, false, true)
+        allow(player_move).to receive(:gets).and_return(opp_pos, valid_pos)
+        allow(player_move).to receive(:valid_pos?).and_return(true, true)
+        allow(player_move).to receive(:color_match?).and_return(false, true)
+        allow(player_move).to receive(:find_piece).with(opp_pos, game_board).and_return(opp_piece)
+        allow(player_move).to receive(:find_piece).with(valid_pos, game_board).and_return(player_piece)
       end
 
-      it 'calls valid_pos? 3 times' do
-        expect(game_move).to receive(:valid_pos?).exactly(3).times
-        game_move.select_piece
+      it 'calls valid_pos? twice' do
+        expect(player_move).to receive(:valid_pos?).twice
+        player_move.select_piece(game_board)
       end
     end
   end

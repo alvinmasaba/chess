@@ -28,27 +28,10 @@ class Game
 
     until @finished
       puts "\n#{@turn}, it's your turn."
-      @turn.move
+      @turn.move_piece(board)
+      #update_board
     end
-  end
-
-  def select_piece
-    puts "\nYou can only select one of your own pieces."
-    piece = gets.chomp
-
-    until valid_pos?(piece) && color_match?(find_piece(piece, @board), @turn)
-      piece = gets.chomp
-    end
-
-    # If the color of the piece at the converted position matches the
-    # color of the player whose turn it is, select the piece, or
-    # puts an error message and call the function again.
-    @selected_piece = find_piece(piece, @board)
   end
 
   private
-
-  def color_match?(piece1, piece2)
-    piece1.color == piece2.color
-  end
 end

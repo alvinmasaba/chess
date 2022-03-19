@@ -29,9 +29,14 @@ class Game
     until @finished
       puts "\n#{@turn}, it's your turn."
       @turn.move_piece(board)
-      #update_board
+      @board.display_board
+      change_turn
     end
   end
 
   private
+
+  def change_turn
+    @turn = @turn == @Player1 ? @player2 : @player1
+  end
 end

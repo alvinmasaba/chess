@@ -21,6 +21,13 @@ module Helpers
     [(x1 - x2).abs, (y1 - y2).abs]
   end
 
+  def convert_to_coordinates(pos)
+    x = pos[1].to_i - 1
+    y = convert_to_num(pos[0] - 1)
+
+    [x, y]
+  end
+
   def enter_name(name)
     puts "\n#{name} please enter a name. Your name may be up to 10 chars max.\n\n"
     new_name = gets.chomp

@@ -19,6 +19,12 @@ class Player
     @name = enter_name(@name)
   end
 
+  def move(board)
+    puts "\nEnter the coordinates of the piece you would like to move."
+    select_piece(board)
+    @selected_piece.move_piece
+  end
+
   private
 
   def select_piece(board)
@@ -31,11 +37,5 @@ class Player
       puts "\nYou can only select one of your OWN pieces."
       @selected_piece = select_piece(board)
     end
-  end
-
-  def move_piece(board)
-    puts "\nEnter the coordinates of the piece you would like to move."
-    select_piece(board)
-    @selected_piece.move
   end
 end

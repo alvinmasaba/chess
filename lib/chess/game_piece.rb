@@ -6,19 +6,19 @@ require_relative 'chess_helpers'
 class GamePiece
   include Helpers
 
-  attr_accessor :position, :color, :symbol, :first_move
+  attr_accessor :position, :color, :symbol, :first_move, :name
 
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2659", 'black': "\u265F" })
+                 symbol = { 'white': "\u2659", 'black': "\u265F" }, name = 'name')
     @position = position
     @color = color
     @symbol = symbol[color]
     @first_move = true
+    @name = name
   end
 
-  def move
-    puts "\nEnter the coordinates of the piece you would like to move
-          starting with the column. E.g. 'A1'."
+  def move_piece
+    puts "\nEnter the coordinates of the square you want to move to."
 
     destination = gets.chomp
 
@@ -27,7 +27,7 @@ class GamePiece
       @first_move = false
     else
       puts 'Invalid move.'
-      move
+      move_piece
     end
   end
 
@@ -41,7 +41,7 @@ end
 # Creates a game piece which moves like a Rook
 class Rook < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2656", 'black': "\u265C" })
+                 symbol = { 'white': "\u2656", 'black': "\u265C" }, name = 'Rook')
     super
   end
 
@@ -57,7 +57,7 @@ end
 # Creates a game piece which moves like a Bishop
 class Bishop < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2657", 'black': "\u265D" })
+                 symbol = { 'white': "\u2657", 'black': "\u265D" }, name = 'Bishop')
     super
   end
 
@@ -74,7 +74,7 @@ end
 # Creates a game piece which moves like a Knight
 class Knight < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2658", 'black': "\u265E" })
+                 symbol = { 'white': "\u2658", 'black': "\u265E" }, name = 'Knight')
     super
   end
 
@@ -91,7 +91,7 @@ end
 # Creates a game piece which moves like a Knight
 class Queen < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2655", 'black': "\u265B" })
+                 symbol = { 'white': "\u2655", 'black': "\u265B" }, name = 'Queen')
     super
   end
 
@@ -112,7 +112,7 @@ end
 # Creates a game piece which moves like a King
 class King < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2654", 'black': "\u265A" })
+                 symbol = { 'white': "\u2654", 'black': "\u265A" }, name = 'King')
     super
   end
 
@@ -128,7 +128,7 @@ end
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2659", 'black': "\u265F" })
+                 symbol = { 'white': "\u2659", 'black': "\u265F" }, name = 'Pawn')
     super
   end
 

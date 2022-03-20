@@ -13,7 +13,7 @@ end
 describe GamePiece do
   subject(:game_piece) { described_class.new('A1') }
 
-  describe '#move' do
+  describe '#move_piece' do
     valid_pos = 'D5'
     invalid_pos = 'A9'
 
@@ -24,7 +24,7 @@ describe GamePiece do
 
       it 'position changes to the entered position' do
         og_pos = game_piece.position
-        expect { game_piece.move }.to change { game_piece.position }.from(og_pos).to(valid_pos)
+        expect { game_piece.move_piece }.to change { game_piece.position }.from(og_pos).to(valid_pos)
       end
     end
 
@@ -36,7 +36,7 @@ describe GamePiece do
 
       it 'puts an error message twice' do
         expect(game_piece).to receive(:puts).with('Invalid move.').twice
-        game_piece.move
+        game_piece.move_piece
       end
     end
   end
@@ -57,7 +57,7 @@ describe Pawn do
       end
 
       it 'changes first_move to false' do
-        expect { pawn_move.move }.to change { pawn_move.first_move }.from(true).to(false)
+        expect { pawn_move.move_piece }.to change { pawn_move.first_move }.from(true).to(false)
       end
     end
   end

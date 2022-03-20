@@ -28,7 +28,7 @@ class Game
 
     until @finished
       puts "\n#{@turn}, it's your turn."
-      @turn.move_piece(@board.board)
+      @turn.move(@board.board)
       @board.update_board
       @board.display_board
       change_turn

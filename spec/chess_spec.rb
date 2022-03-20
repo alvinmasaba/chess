@@ -8,52 +8,6 @@ describe Player do
   let(:game_board) { instance_double(GameBoard) }
   let(:player_piece) { instance_double(GamePiece, color: :white) }
   let(:opp_piece) { instance_double(GamePiece, color: :black) }
-
-  # A method that can select a GamePiece at a specific position
-  describe 'select_piece' do
-    valid_pos = 'B8'
-    invalid_pos = 'D3'
-    opp_pos = 'B1'
-
-    context 'when a valid position is entered' do
-      before do
-        allow(player_move).to receive(:gets).and_return(valid_pos)
-        allow(player_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
-        allow(player_move).to receive(:find_piece).with(valid_pos, game_board).and_return(player_piece)
-      end
-      it 'changes :selected_piece to the GamePiece at that board position' do
-        expect { player_move.select_piece(game_board) }.to change { player_move.selected_piece }.from(nil).to(player_piece)
-      end
-    end
-
-    context 'when an invalid position is entered twice' do
-      before do
-        allow(player_move).to receive(:gets).and_return(invalid_pos, invalid_pos, valid_pos)
-        allow(player_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
-        allow(player_move).to receive(:find_piece).with(valid_pos, game_board).and_return(player_piece)
-      end
-
-      it 'calls valid_board_pos? 3 times' do
-        expect(player_move).to receive(:valid_pos?).exactly(3).times
-        player_move.select_piece(game_board)
-      end
-    end
-
-    context 'when an opponents piece is selected' do
-      before do
-        allow(player_move).to receive(:gets).and_return(opp_pos, valid_pos)
-        allow(player_move).to receive(:valid_pos?).and_return(true, true)
-        allow(player_move).to receive(:color_match?).and_return(false, true)
-        allow(player_move).to receive(:find_piece).with(opp_pos, game_board).and_return(opp_piece)
-        allow(player_move).to receive(:find_piece).with(valid_pos, game_board).and_return(player_piece)
-      end
-
-      it 'calls valid_pos? twice' do
-        expect(player_move).to receive(:valid_pos?).twice
-        player_move.select_piece(game_board)
-      end
-    end
-  end
 end
 
 describe GamePiece do

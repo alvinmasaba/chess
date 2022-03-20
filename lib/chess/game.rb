@@ -12,7 +12,7 @@ class Game
   attr_accessor :player1, :player2, :board, :finished, :turn, :selected_piece
 
   def initialize
-    @board = GameBoard.new.board
+    @board = GameBoard.new
     @player1 = Player.new('Player 1', :white)
     @player2 = Player.new('Player 2', :black)
     @turn = @player1
@@ -28,7 +28,8 @@ class Game
 
     until @finished
       puts "\n#{@turn}, it's your turn."
-      @turn.move_piece(board)
+      @turn.move_piece(@board.board)
+      @board.update_board
       @board.display_board
       change_turn
     end

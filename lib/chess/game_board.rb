@@ -33,30 +33,6 @@ class GameBoard
   end
 
   def display_board
-    update_board
-    build_board
-  end
-
-  private
-
-  def create_board
-    # Unicode space will occupy the same space as a chess piece, maintaining
-    # the size of the board when drawn.
-    temp_board = Array.new(8) { Array.new(8, "\u0020") }
-    new_board = []
-
-    temp_board.each_with_index do |_, i|
-      new_board << BLACK if i.zero?
-      new_board << BLACK_PAWN if i == 1
-      new_board << WHITE_PAWN if i == 6
-      new_board << WHITE if i == 7
-      new_board << Array.new(8, "\u0020") if i.between?(2, 5)
-    end
-
-    new_board
-  end
-
-  def build_board
     separator = Array.new(8 + 1, '+').join('---')
     puts "\n"
 
@@ -86,7 +62,26 @@ class GameBoard
         temp_board[coord[0][coord[1]]] = val
       end
     end
+
+    @board = temp_board
   end
 
-  @board = temp_board
+  private
+
+  def create_board
+    # Unicode space will occupy the same space as a chess piece, maintaining
+    # the size of the board when drawn.
+    temp_board = Array.new(8) { Array.new(8, "\u0020") }
+    new_board = []
+
+    temp_board.each_with_index do |_, i|
+      new_board << BLACK if i.zero?
+      new_board << BLACK_PAWN if i == 1
+      new_board << WHITE_PAWN if i == 6
+      new_board << WHITE if i == 7
+      new_board << Array.new(8, "\u0020") if i.between?(2, 5)
+    end
+
+    new_board
+  end
 end

@@ -19,22 +19,22 @@ class Player
     @name = enter_name(@name)
   end
 
+  private
+
   def select_piece(board)
-    puts "\nYou can only select one of your own pieces."
-
     pos = gets.chomp
+    piece = find_piece(pos, board)
 
-    until valid_pos?(pos) && color_match?(find_piece(pos, board).color, @color)
-      pos = gets.chomp
+    if valid_pos?(pos) && piece != "\u0020" && color_match?(piece.color, @color)
+      @selected_piece = piece
+    else
+      puts "\nYou can only select one of your OWN pieces."
+      @selected_piece = select_piece(board)
     end
-
-    # If the color of the piece at the converted position matches the
-    # color of the player whose turn it is, select the piece, or
-    # puts an error message and call the function again.
-    @selected_piece = find_piece(pos, board)
   end
 
   def move_piece(board)
+    puts "\nEnter the coordinates of the piece you would like to move."
     select_piece(board)
     @selected_piece.move
   end

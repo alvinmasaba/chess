@@ -23,7 +23,7 @@ module Helpers
 
   def convert_to_coordinates(pos)
     x = pos[1].to_i - 1
-    y = convert_to_num(pos[0] - 1)
+    y = convert_to_num(pos[0]) - 1
 
     [x, y]
   end
@@ -42,7 +42,7 @@ module Helpers
   def find_piece(position, board)
     # If the string entered is in the format '[letter][integer]', convert
     # to corresponding index in gameboard array. E.g. 'A1' == [0][0].
-    piece = [convert_to_num(position[0]) - 1, position[1].to_i - 1]
+    piece = convert_to_coordinates(position)
     board[piece[0]][piece[1]]
   end
 

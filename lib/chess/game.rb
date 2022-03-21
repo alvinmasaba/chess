@@ -27,8 +27,8 @@ class Game
     @board.display_board
 
     until @finished
-      puts "\n#{@turn}, it's your turn."
-      @turn.move(@board.board)
+      puts "\n#{@turn.name}, it's your turn."
+      @turn.move
       @board.display_board
       change_turn
     end
@@ -37,6 +37,6 @@ class Game
   private
 
   def change_turn
-    @turn = @turn == @Player1 ? @player2 : @player1
+    @turn = @turn == @player1 ? @player2 : @player1
   end
 end

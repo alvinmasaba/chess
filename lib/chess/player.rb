@@ -32,7 +32,7 @@ class Player
     pos = gets.chomp
 
     if valid_pos?(pos)
-      piece = find_piece(pos, @board)
+      piece = find_piece(pos, @board.board)
       # If the entered position contains a GamePiece with the same color as the
       # player selecting it, sets @selected_piece to that piece. Else, calls
       # select_piece recursively.

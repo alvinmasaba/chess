@@ -15,14 +15,15 @@ class GamePiece
     @symbol = symbol[color]
     @first_move = true
     @name = name
+    @board = board
   end
 
-  def move_piece
+  def move_piece(board, player)
     puts "\nEnter the coordinates of the square you want to move to."
 
-    destination = gets.chomp
+    destination = gets.chomp.downcase
 
-    if valid_pos?(destination)
+    if valid_dest?(destination, board, player)
       @position = destination
       @first_move = false
     else
@@ -33,8 +34,16 @@ class GamePiece
 
   private
 
-  def valid_pos?(pos)
-    super && pos != position
+  def valid_dest?(dest, board)
+    if valid_pos?(dest) && dest != @position
+      # Return true if destination is an empty square or it contains an opp piece
+      val = find_piece(dest, board)
+      return true if val == "\u0020" || val.color != player.color
+    else
+      false
+    end
+
+    false
   end
 end
 
@@ -133,6 +142,8 @@ class Pawn < GamePiece
   end
 
   def valid_pos?(pos)
+    return false unless super
+
     change = change_in_coordinates(position, pos)
 
     if first_move

@@ -23,7 +23,7 @@ class Player
   def move
     puts "\nEnter the coordinates of the piece you would like to move."
     select_piece
-    @selected_piece.move_piece
+    @selected_piece.move_piece(@board.board, self)
   end
 
   private

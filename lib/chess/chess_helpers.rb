@@ -11,6 +11,8 @@ module Helpers
   end
 
   def change_in_coordinates(pos, dest)
+    return nil if pos.size != 2 || dest.size != 2
+
     # Convert pos and dest to wholy numeric coordinates.
     x1 = convert_to_num(pos[0])
     y1 = pos[1].to_i
@@ -22,6 +24,8 @@ module Helpers
   end
 
   def convert_to_coordinates(pos)
+    return nil if pos.size != 2
+
     x = pos[1].to_i - 1
     y = convert_to_num(pos[0]) - 1
 

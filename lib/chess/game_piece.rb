@@ -41,7 +41,7 @@ end
 # Creates a game piece which moves like a Rook
 class Rook < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2656", 'black': "\u265C" }, name = 'Rook')
+                 symbol = { 'white': "\u265C", 'black': "\u2656" }, name = 'Rook')
     super
   end
 
@@ -57,7 +57,7 @@ end
 # Creates a game piece which moves like a Bishop
 class Bishop < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2657", 'black': "\u265D" }, name = 'Bishop')
+                 symbol = { 'white': "\u265D", 'black': "\u2657" }, name = 'Bishop')
     super
   end
 
@@ -74,7 +74,7 @@ end
 # Creates a game piece which moves like a Knight
 class Knight < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2658", 'black': "\u265E" }, name = 'Knight')
+                 symbol = { 'white': "\u265E", 'black': "\u2658" }, name = 'Knight')
     super
   end
 
@@ -91,7 +91,7 @@ end
 # Creates a game piece which moves like a Knight
 class Queen < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2655", 'black': "\u265B" }, name = 'Queen')
+                 symbol = { 'white': "\u265B", 'black': "\u2655" }, name = 'Queen')
     super
   end
 
@@ -112,7 +112,7 @@ end
 # Creates a game piece which moves like a King
 class King < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2654", 'black': "\u265A" }, name = 'King')
+                 symbol = { 'white': "\u265A", 'black': "\u2654" }, name = 'King')
     super
   end
 
@@ -128,7 +128,7 @@ end
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
   def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2659", 'black': "\u265F" }, name = 'Pawn')
+                 symbol = { 'white': "\u265F", 'black': "\u2659" }, name = 'Pawn')
     super
   end
 

@@ -13,8 +13,8 @@ class Game
 
   def initialize
     @board = GameBoard.new
-    @player1 = Player.new('Player 1', :white)
-    @player2 = Player.new('Player 2', :black)
+    @player1 = Player.new('Player 1', :white, @board)
+    @player2 = Player.new('Player 2', :black, @board)
     @turn = @player1
     @finished = false
     @selected_piece = nil
@@ -29,7 +29,6 @@ class Game
     until @finished
       puts "\n#{@turn}, it's your turn."
       @turn.move(@board.board)
-      @board.update_board
       @board.display_board
       change_turn
     end

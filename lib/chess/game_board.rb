@@ -33,15 +33,15 @@ class GameBoard
     @board = create_board
   end
 
-  def display_board
+  def display_board(idx = 1)
     # Update the board array then print the board display
     update_board
-
-    separator = Array.new(8 + 1, '+').join('---')
-    puts "\n"
+    separator = '     ' + Array.new(8 + 1, '+').join('---')
+    create_header
 
     board.each do |row|
       puts separator
+      print "  #{idx}  "
 
       row.each_with_index do |piece, i|
         piece = piece == "\u0020" ? row[i] : piece.symbol
@@ -50,12 +50,21 @@ class GameBoard
 
       print '|'
       print "\n"
+      idx += 1
     end
 
     puts separator
   end
 
   private
+
+  def create_header
+    letters = ('A'..'H').to_a
+    puts "\n"
+    print '      '
+    letters.each { |letter| print " #{letter}  " }
+    puts "\n"
+  end
 
   def create_board
     # Unicode space will occupy the same space as a chess piece, maintaining

@@ -28,13 +28,13 @@ class GamePiece
       @first_move = false
     else
       puts 'Invalid move.'
-      move_piece
+      move_piece(board, player)
     end
   end
 
   private
 
-  def valid_dest?(dest, board)
+  def valid_dest?(dest, board, player)
     if valid_pos?(dest) && dest != @position
       # Return true if destination is an empty square or it contains an opp piece
       val = find_piece(dest, board)

@@ -18,6 +18,7 @@ class Player
 
   def choose_name
     @name = enter_name(@name)
+    puts "\n#{@name}, you control the #{@color} pieces."
   end
 
   def move

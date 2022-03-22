@@ -8,8 +8,8 @@ class GamePiece
 
   attr_accessor :position, :color, :symbol, :first_move, :name
 
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u2659", 'black': "\u265F" }, name = 'name')
+  def initialize(board, position = nil, color = :white, name = 'name',
+                 symbol = { 'white': "\u2659", 'black': "\u265F" })
     @position = position
     @color = color
     @symbol = symbol[color]
@@ -49,8 +49,8 @@ end
 
 # Creates a game piece which moves like a Rook
 class Rook < GamePiece
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u265C", 'black': "\u2656" }, name = 'Rook')
+  def initialize(board, position = nil, color = :white, name = 'Rook',
+                 symbol = { 'white': "\u265C", 'black': "\u2656" })
     super
   end
 
@@ -65,8 +65,8 @@ end
 
 # Creates a game piece which moves like a Bishop
 class Bishop < GamePiece
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u265D", 'black': "\u2657" }, name = 'Bishop')
+  def initialize(board, position = nil, color = :white, name = 'Bishop',
+                 symbol = { 'white': "\u265D", 'black': "\u2657" })
     super
   end
 
@@ -82,8 +82,8 @@ end
 
 # Creates a game piece which moves like a Knight
 class Knight < GamePiece
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u265E", 'black': "\u2658" }, name = 'Knight')
+  def initialize(board, position = nil, color = :white, name = 'Knight',
+                 symbol = { 'white': "\u265E", 'black': "\u2658" })
     super
   end
 
@@ -99,8 +99,8 @@ end
 
 # Creates a game piece which moves like a Knight
 class Queen < GamePiece
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u265B", 'black': "\u2655" }, name = 'Queen')
+  def initialize(board, position = nil, color = :white, name = 'Queen',
+                 symbol = { 'white': "\u265B", 'black': "\u2655" })
     super
   end
 
@@ -120,8 +120,8 @@ end
 
 # Creates a game piece which moves like a King
 class King < GamePiece
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u265A", 'black': "\u2654" }, name = 'King')
+  def initialize(board, position = nil, color = :white, name = 'King',
+                 symbol = { 'white': "\u265A", 'black': "\u2654" })
     super
   end
 
@@ -136,8 +136,8 @@ end
 
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
-  def initialize(position = nil, color = :white,
-                 symbol = { 'white': "\u265F", 'black': "\u2659" }, name = 'Pawn')
+  def initialize(board, position = nil, color = :white, name = 'Pawn',
+                 symbol = { 'white': "\u265F", 'black': "\u2659" })
     super
   end
 

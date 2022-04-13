@@ -2,6 +2,7 @@
 
 require './lib/chess/game_piece'
 require './lib/chess/game'
+require './lib/chess/player'
 
 describe Player do
   subject(:player_move) { described_class.new('Player 1', :white) }
@@ -12,6 +13,7 @@ end
 
 describe GamePiece do
   subject(:game_piece) { described_class.new('A1') }
+  let(:game_board) { instance_double(GameBoard) }
 
   describe '#move_piece' do
     valid_pos = 'D5'
@@ -23,8 +25,11 @@ describe GamePiece do
       end
 
       it 'position changes to the entered position' do
+        board = game_board.create_board
+        let(:player) { instance_double(Player, name: 'Player 1', color: :white, board: board) }
+
         og_pos = game_piece.position
-        expect { game_piece.move_piece }.to change { game_piece.position }.from(og_pos).to(valid_pos)
+        expect { game_piece.move_piece(game_board.board, player) }.to change { game_piece.position }.from(og_pos).to(valid_pos)
       end
     end
 

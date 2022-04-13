@@ -46,13 +46,13 @@ module Helpers
   def find_piece(position, board)
     # If the string entered is in the format '[letter][integer]', convert
     # to corresponding index in gameboard array. E.g. 'A1' == [0][0].
-    coord = convert_to_coordinates(position)
-    board[coord[0]][coord[1]]
+    piece = convert_to_coordinates(position)
+    board[piece[0]][piece[1]]
   end
 
   def valid_pos?(pos)
     # A valid position is a string of length 2.
-    return false if pos.size != 2 || pos.nil?
+    return false unless pos.size == 2
 
     # It starts with a letter between A and H and ends
     # with an integer between 1 and 8 and cannot be its
@@ -62,115 +62,5 @@ module Helpers
 
   def color_match?(color1, color2)
     color1 == color2
-  end
-
-  def step(c, delta = 1)
-    [c.ord + delta].pack 'U'
-  end
-
-  def increment(c)
-    step c, 1
-  end
-
-  def decrement(c)
-    step c, -1
-  end
-
-  def find_diagonal_path(curr, dest)
-    # Returns the descending or ascending diagonal path.
-    return desc_diag(curr, dest) if dest[1] > curr[1]
-
-    asc_diag(curr, dest)
-  end
-
-  def desc_diag(curr, dest, path = [])
-    if dest[0] > curr[0]
-      until curr == dest
-        # Increments both letter and num coordinate to simulate
-        # downward diagonal movement to the right.
-        curr = "#{increment(curr[0])}#{increment(curr[1])}"
-        path << curr unless curr == dest
-      end
-    else
-      until curr == dest
-        # Decrements letter and increments num coordinate to simulate
-        # downward diagonal movement to the left.
-        curr = "#{decrement(curr[0])}#{increment(curr[1])}"
-        path << curr unless curr == dest
-      end
-    end
-
-    path
-  end
-
-  def asc_diag(curr, dest, path = [])
-    if dest[0] > curr[0]
-      until curr == dest
-        # Increments letter and decrements num coordinate to simulate
-        # upward diagonal movement to the right.
-        curr = "#{increment(curr[0])}#{decrement(curr[1])}"
-        path << curr unless curr == dest
-      end
-    else
-      until curr == dest
-        # Decrements both letter and num coordinate to simulate
-        # upward diagonal movement to the left.
-        curr = "#{decrement(curr[0])}#{decrement(curr[1])}"
-        path << curr unless curr == dest
-      end
-    end
-
-    path
-  end
-
-  def find_vert_path(curr, dest)
-    # Returns the descending or ascending vertical path.
-    return desc_vert(curr, dest) if dest[1] > curr[1]
-
-    asc_vert(curr, dest)
-  end
-
-  def desc_vert(curr, dest, path = [])
-    until curr == dest
-      # Increments num coordinate to simulate downward vertical movement.
-      curr = "#{curr[0]}#{increment(curr[1])}"
-      path << curr unless curr == dest
-    end
-
-    path
-  end
-
-  def asc_vert(curr, dest, path = [])
-    until curr == dest
-      curr = "#{curr[0]}#{decrement(curr[1])}"
-      path << curr unless curr == dest
-    end
-
-    path
-  end
-
-  def find_horiz_path(curr, dest)
-    # Returns the left or right horizontal path.
-    return left_horiz(curr, dest) if dest[0] > curr[0]
-
-    right_horiz(curr, dest)
-  end
-
-  def left_horiz(curr, dest, path = [])
-    until curr == dest
-      curr = "#{decrement(curr[0])}#{curr[1]}"
-      path << curr unless curr == dest
-    end
-
-    path
-  end
-
-  def right_horiz(curr, dest, path = [])
-    until curr == dest
-      curr = "#{increment(curr[0])}#{curr[1]}"
-      path << curr unless curr == dest
-    end
-
-    path
   end
 end

@@ -2,6 +2,7 @@
 
 require_relative 'game_piece'
 
+
 # Creates a playable chess board
 class GameBoard
   include Helpers

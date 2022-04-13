@@ -1,66 +1,66 @@
 # frozen_string_literal: true
 
-# Chess helper functions
-module Helpers
-  # Letters to integer conversion hash for chess game board.
-  ALPHA_TO_NUM = { 'a': 1, 'b': 2, 'c': 3, 'd': 4,
-                   'e': 5, 'f': 6, 'g': 7, 'h': 8 }.freeze
+require_relative 'chess_helpers'
+# Creates an active chess player
+class Player
+  include Helpers
 
-  def convert_to_num(string)
-    ALPHA_TO_NUM[string.downcase.to_sym]
+  attr_accessor :name, :color, :board, :selected_piece,
+                :taken_pieces, :in_check, :in_checkmate
+
+  def initialize(name, color, board)
+    @in_check = false
+    @in_checkmate = false
+    @name = name
+    @color = color
+    @board = board
+    @selected_piece = nil
+    @taken_pieces = []
   end
 
-  def change_in_coordinates(pos, dest)
-    return nil if pos.size != 2 || dest.size != 2
-
-    # Convert pos and dest to wholy numeric coordinates.
-    x1 = convert_to_num(pos[0])
-    y1 = pos[1].to_i
-    x2 = convert_to_num(dest[0])
-    y2 = dest[1].to_i
-
-    # Return the change in x and the change in y.
-    [(x1 - x2).abs, (y1 - y2).abs]
+  def choose_name
+    @name = enter_name(@name)
+    puts "\n#{@name}, you control the #{@color} pieces."
   end
 
-  def convert_to_coordinates(pos)
-    return nil if pos.size != 2
+  def move
+    puts "\nEnter the coordinates of the piece you would like to move.\n"
+    select_piece
+    @selected_piece.move_piece(@board.board, self)
 
-    x = pos[1].to_i - 1
-    y = convert_to_num(pos[0]) - 1
-
-    [x, y]
+    # Sets selected piece's first move to false if it was its first move.
+    @selected_piece.first_move = false if @selected_piece.first_move
   end
 
-  def enter_name(name)
-    puts "\n#{name} please enter a name. Your name may be up to 10 chars max.\n\n"
-    new_name = gets.chomp
+  def take_piece(piece)
+    take(piece)
+  end
 
-    if /\S/.match(new_name) && new_name.size.between?(1, 10)
-      new_name
+  private
+
+  def take(piece)
+    @taken_pieces << piece
+    piece.position = nil
+  end
+
+  def select_piece
+    pos = gets.chomp
+
+    if valid_pos?(pos)
+      piece = find_piece(pos, @board.board)
+      # If the entered position contains a GamePiece with the same color as the
+      # player selecting it, sets @selected_piece to that piece. Else, calls
+      # select_piece recursively.
+      piece = opp_piece?(piece) ? piece : select_piece
     else
-      enter_name
+      puts "\nYou can only select one of your OWN pieces."
+      piece = select_piece
     end
+
+    @selected_piece = piece
   end
 
-  def find_piece(position, board)
-    # If the string entered is in the format '[letter][integer]', convert
-    # to corresponding index in gameboard array. E.g. 'A1' == [0][0].
-    piece = convert_to_coordinates(position)
-    board[piece[0]][piece[1]]
-  end
-
-  def valid_pos?(pos)
-    # A valid position is a string of length 2.
-    return false unless pos.size == 2
-
-    # It starts with a letter between A and H and ends
-    # with an integer between 1 and 8 and cannot be its
-    # own position.
-    /[A-Ha-h][1-8]/.match?(pos)
-  end
-
-  def color_match?(color1, color2)
-    color1 == color2
+  def opp_piece?(piece)
+    piece.is_a?(GamePiece) && color_match?(piece.color, @color)
   end
 end

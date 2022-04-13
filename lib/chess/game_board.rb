@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'game_piece'
-require 'pry-byebug'
 
 # Creates a playable chess board
 class GameBoard
@@ -9,25 +8,25 @@ class GameBoard
 
   attr_accessor :board
 
-  BLACK = [Rook.new(self, 'A1', :black), Knight.new(self, 'B1', :black),
-           Bishop.new(self, 'C1', :black), Queen.new(self, 'D1', :black),
-           King.new(self, 'E1', :black), Bishop.new(self, 'F1', :black),
-           Knight.new(self, 'G1', :black), Rook.new(self, 'H1', :black)].freeze
+  BLACK = [Rook.new('A1', :black), Knight.new('B1', :black),
+           Bishop.new('C1', :black), Queen.new('D1', :black),
+           King.new('E1', :black), Bishop.new('F1', :black),
+           Knight.new('G1', :black), Rook.new('H1', :black)].freeze
 
-  WHITE = [Rook.new(self, 'A8', :white), Knight.new(self, 'B8', :white),
-           Bishop.new(self, 'C8', :white), Queen.new(self, 'D8', :white),
-           King.new(self, 'E8', :white), Bishop.new(self, 'F8', :white),
-           Knight.new(self, 'G8', :white), Rook.new(self, 'H8', :white)].freeze
+  WHITE = [Rook.new('A8', :white), Knight.new('B8', :white),
+           Bishop.new('C8', :white), Queen.new('D8', :white),
+           King.new('E8', :white), Bishop.new('F8', :white),
+           Knight.new('G8', :white), Rook.new('H8', :white)].freeze
 
-  BLACK_PAWN = [Pawn.new(self, 'A2', :black), Pawn.new(self, 'B2', :black),
-                Pawn.new(self, 'C2', :black), Pawn.new(self, 'D2', :black),
-                Pawn.new(self, 'E2', :black), Pawn.new(self, 'F2', :black),
-                Pawn.new(self, 'G2', :black), Pawn.new(self, 'H2', :black)].freeze
+  BLACK_PAWN = [Pawn.new('A2', :black), Pawn.new('B2', :black),
+                Pawn.new('C2', :black), Pawn.new('D2', :black),
+                Pawn.new('E2', :black), Pawn.new('F2', :black),
+                Pawn.new('G2', :black), Pawn.new('H2', :black)].freeze
 
-  WHITE_PAWN = [Pawn.new(self, 'A7', :white), Pawn.new(self, 'B7', :white),
-                Pawn.new(self, 'C7', :white), Pawn.new(self, 'D7', :white),
-                Pawn.new(self, 'E7', :white), Pawn.new(self, 'F7', :white),
-                Pawn.new(self, 'G7', :white), Pawn.new(self, 'H7', :white)].freeze
+  WHITE_PAWN = [Pawn.new('A7', :white), Pawn.new('B7', :white),
+                Pawn.new('C7', :white), Pawn.new('D7', :white),
+                Pawn.new('E7', :white), Pawn.new('F7', :white),
+                Pawn.new('G7', :white), Pawn.new('H7', :white)].freeze
 
   def initialize
     @board = create_board
@@ -39,17 +38,11 @@ class GameBoard
     separator = '     ' + Array.new(8 + 1, '+').join('---')
     create_header
 
-    board.each do |row|
+    @board.each do |row|
       puts separator
       print "  #{idx}  "
 
-      row.each_with_index do |piece, i|
-        piece = piece == "\u0020" ? row[i] : piece.symbol
-        print "| #{piece} "
-      end
-
-      print '|'
-      print "\n"
+      build_rows(row)
       idx += 1
     end
 
@@ -57,14 +50,6 @@ class GameBoard
   end
 
   private
-
-  def create_header
-    letters = ('A'..'H').to_a
-    puts "\n"
-    print '      '
-    letters.each { |letter| print " #{letter}  " }
-    puts "\n"
-  end
 
   def create_board
     # Unicode space will occupy the same space as a chess piece, maintaining
@@ -81,6 +66,24 @@ class GameBoard
     end
 
     new_board
+  end
+
+  def build_rows(row)
+    row.each_with_index do |piece, i|
+      piece = piece == "\u0020" ? row[i] : piece.symbol
+      print "| #{piece} "
+    end
+
+    print '|'
+    print "\n"
+  end
+
+  def create_header
+    letters = ('A'..'H').to_a
+    puts "\n"
+    print '      '
+    letters.each { |letter| print " #{letter}  " }
+    puts "\n"
   end
 
   def update_board

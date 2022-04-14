@@ -20,60 +20,10 @@ class GamePiece
     @can_jump = false
   end
 
-  def move_piece(board, player)
-    puts "\nEnter the coordinates of the square you want to move to."
-
-    destination = gets.chomp.downcase
-
-    if valid_dest?(destination, board, player)
-      path = find_path(@position.downcase, destination)
-
-      @position = player.move if obstructed?(path, board)
-
-      @position = destination
-    else
-      puts 'Invalid move.'
-      @position = player.move
-    end
-  end
-
   private
 
-  def find_path(curr_pos, dest)
-    # Finds the path to destination based on if it is located
-    # diagonally, vertically or horizontally from the current position.
-    if dest[0] != curr_pos[0] && dest[1] != curr_pos[1]
-      find_diagonal_path(curr_pos, dest)
-    elsif dest[0] == curr_pos[0]
-      find_vert_path(curr_pos, dest)
-    else
-      find_horiz_path(curr_pos, dest)
-    end
-  end
-
-  def obstructed?(path, board, obstructed = false)
-    return false if @can_jump
-
-    path.each do |sqr|
-      val = find_piece(sqr, board)
-
-      next if val == EMPTY_SQUARE
-
-      obstructed = true
-    end
-
-    puts 'Invalid move.' if obstructed
-
-    obstructed
-  end
-
-  def valid_dest?(dest, board, player)
-    return false unless valid_pos?(dest) && dest != @position
-
-    # Return true if destination is an empty square or it contains an opp piece
-    dest_val = find_piece(dest, board)
-
-    dest_val == "\u0020" || dest_val.color != player.color
+  def change_position(new_position)
+    @position = new_position
   end
 end
 

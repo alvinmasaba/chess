@@ -76,6 +76,18 @@ module Helpers
     step c, -1
   end
 
+  def find_path(curr_pos, dest)
+    # Finds the path to destination based on if it is located
+    # diagonally, vertically or horizontally from the current position.
+    if dest[0] != curr_pos[0] && dest[1] != curr_pos[1]
+      find_diagonal_path(curr_pos, dest)
+    elsif dest[0] == curr_pos[0]
+      find_vert_path(curr_pos, dest)
+    else
+      find_horiz_path(curr_pos, dest)
+    end
+  end
+
   def find_diagonal_path(curr, dest)
     # Returns the descending or ascending diagonal path.
     return desc_diag(curr, dest) if dest[1] > curr[1]
@@ -172,5 +184,21 @@ module Helpers
     end
 
     path
+  end
+
+  def obstructed?(path, board, piece, obstructed = false)
+    return false if piece.can_jump
+
+    path.each do |sqr|
+      val = find_piece(sqr, board)
+
+      next if val == EMPTY_SQUARE
+
+      obstructed = true
+    end
+
+    puts 'Invalid move.' if obstructed
+
+    obstructed
   end
 end

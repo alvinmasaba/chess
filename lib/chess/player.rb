@@ -24,9 +24,19 @@ class Player
   end
 
   def move
-    puts "\nEnter the coordinates of the piece you would like to move.\n"
     select_piece
-    @selected_piece.move_piece(@board.board, self)
+
+    destination = enter_destination
+
+    until valid_dest?(destination)
+      puts "\nInvalid move. Re-enter the coordinates you wish to move to or\n
+      enter 1 to select a different piece:\n"
+
+      input = gets.chomp.downcase
+      destination = reenter_destination(input)
+    end
+
+    @selected_piece.change_position(destination)
 
     # Sets selected piece's first move to false if it was its first move.
     @selected_piece.first_move = false if @selected_piece.first_move
@@ -38,12 +48,43 @@ class Player
 
   private
 
+  def enter_destination
+    puts "\nEnter the coordinates of the square you want to move to:\n"
+    destination = gets.chomp.downcase
+
+    destination
+  end
+
+  def reenter_destination(input)
+    if input == '1'
+      select_piece
+      destination = enter_destination
+    else
+      destination = input
+    end
+
+    destination
+  end
+
+  def valid_dest?(dest)
+    return false unless valid_pos?(dest) && dest != @selected_piece.position
+
+    # Return false unless destination is empty or contains an opp piece.
+    val = find_piece(dest, @board.board)
+    return false unless val == "\u0020" || val.color != @color
+
+    path = find_path(@selected_piece.position.downcase, dest.downcase)
+
+    obstructed?(path, @board.board, @selected_piece)
+  end
+
   def take(piece)
     @taken_pieces << piece
     piece.position = nil
   end
 
   def select_piece
+    puts "\nEnter the coordinates of the piece you would like to move:\n"
     pos = gets.chomp
 
     if valid_pos?(pos)

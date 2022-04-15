@@ -29,21 +29,19 @@ class Player
     destination = enter_destination
 
     until valid_dest?(destination)
-      puts "\nInvalid move. Re-enter the coordinates you wish to move to or\n
-      enter 1 to select a different piece:\n"
+      puts "\nInvalid move. Re-enter the coordinates you wish to move to or enter 1 to select a different piece:\n"
 
       input = gets.chomp.downcase
       destination = reenter_destination(input)
     end
 
+    # Takes the piece if there is an opponent piece present at destination.
+    take_piece(find_piece(destination, @board.board))
+
     @selected_piece.change_position(destination)
 
     # Sets selected piece's first move to false if it was its first move.
     @selected_piece.first_move = false if @selected_piece.first_move
-  end
-
-  def take_piece(piece)
-    take(piece)
   end
 
   private
@@ -81,7 +79,15 @@ class Player
     obstructed?(path, @board.board, @selected_piece) ? false : true
   end
 
+  def take_piece(piece)
+    # Piece will only be an opponent piece or an empty square.
+    # Calls take if it is an GamePiece.
+    take(piece) if piece.is_a?(GamePiece)
+  end
+
   def take(piece)
+    # Appends opponent piece to taken_pieces array, then sets position
+    # of piece to nil to remove it from the board.
     @taken_pieces << piece
     piece.position = nil
   end

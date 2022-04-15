@@ -11,42 +11,6 @@ describe Player do
   let(:opp_piece) { instance_double(GamePiece, color: :black) }
 end
 
-describe GamePiece do
-  subject(:game_piece) { described_class.new('A1') }
-  let(:game_board) { instance_double(GameBoard) }
-
-  describe '#move_piece' do
-    valid_pos = 'D5'
-    invalid_pos = 'A9'
-
-    context 'when a valid position is entered' do
-      before do
-        allow(game_piece).to receive(:gets).and_return(valid_pos)
-      end
-
-      it 'position changes to the entered position' do
-        board = game_board.create_board
-        let(:player) { instance_double(Player, name: 'Player 1', color: :white, board: board) }
-
-        og_pos = game_piece.position
-        expect { game_piece.move_piece(game_board.board, player) }.to change { game_piece.position }.from(og_pos).to(valid_pos)
-      end
-    end
-
-    context 'when an invalid position is entered twice' do
-      before do
-        allow(game_piece).to receive(:puts)
-        allow(game_piece).to receive(:gets).and_return(invalid_pos, invalid_pos, valid_pos)
-      end
-
-      it 'puts an error message twice' do
-        expect(game_piece).to receive(:puts).with('Invalid move.').twice
-        game_piece.move_piece
-      end
-    end
-  end
-end
-
 describe Pawn do
   subject(:pawn_move) { described_class.new('B1') }
 

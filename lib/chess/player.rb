@@ -5,7 +5,7 @@ require_relative 'chess_helpers'
 class Player
   include Helpers
 
-  attr_accessor :name, :color, :board, :selected_piece,
+  attr_accessor :name, :color, :board, :selected_piece, :pieces,
                 :taken_pieces, :in_check, :in_checkmate
 
   def initialize(name, color, board)
@@ -15,6 +15,7 @@ class Player
     @color = color
     @board = board
     @selected_piece = nil
+    @pieces = collect_pieces
     @taken_pieces = []
   end
 
@@ -45,6 +46,16 @@ class Player
   end
 
   private
+
+  def collect_pieces(pieces = [])
+    @board.board.each do |row|
+      row.each do |piece|
+        pieces << piece unless opp_piece?(piece) || piece == EMPTY_SQUARE
+      end
+    end
+
+    pieces
+  end
 
   def enter_destination
     puts "\nEnter the coordinates of the square you want to move to:\n"

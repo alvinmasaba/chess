@@ -6,12 +6,14 @@ module Helpers
   ALPHA_TO_NUM = { 'a': 1, 'b': 2, 'c': 3, 'd': 4,
                    'e': 5, 'f': 6, 'g': 7, 'h': 8 }.freeze
 
+  EMPTY_SQUARE = "\u0020"
+
   def convert_to_num(string)
     ALPHA_TO_NUM[string.downcase.to_sym]
   end
 
   def change_in_coordinates(pos, dest)
-    return nil if pos.size != 2 || dest.size != 2
+    return nil if invalid_sizes(pos, dest)
 
     # Convert pos and dest to wholy numeric coordinates.
     x1 = convert_to_num(pos[0])
@@ -21,6 +23,11 @@ module Helpers
 
     # Return the change in x and the change in y.
     [(x1 - x2).abs, (y1 - y2).abs]
+  end
+
+  def invalid_sizes(pos, dest)
+    # Returns false unless both pos and dest are of length 2.
+    pos.size != 2 || dest.size != 2
   end
 
   def convert_to_coordinates(pos)
@@ -77,6 +84,9 @@ module Helpers
   end
 
   def find_path(curr_pos, dest)
+    curr_pos = curr_pos.downcase
+    dest = dest.downcase
+
     # Finds the path to destination based on if it is located
     # diagonally, vertically or horizontally from the current position.
     if dest[0] != curr_pos[0] && dest[1] != curr_pos[1]
@@ -88,6 +98,32 @@ module Helpers
     end
   end
 
+  def get_path(curr, dest, col_step, row_step, path = [])
+    # Appends 'col-row' to path array until destination value is reached.
+    # Returns path array.
+    until curr == dest
+      col = choose_step(col_step, curr[0])
+      row = choose_step(row_step, curr[1])
+
+      curr = "#{col}#{row}"
+
+      path << curr unless curr == dest
+    end
+
+    path
+  end
+
+  def choose_step(string, val)
+    # Increments, decrements or simply returns value based on input string.
+    if string == 'increment'
+      increment(val)
+    elsif string == ''
+      val
+    else
+      decrement(val)
+    end
+  end
+
   def find_diagonal_path(curr, dest)
     # Returns the descending or ascending diagonal path.
     return desc_diag(curr, dest) if dest[1] > curr[1]
@@ -95,44 +131,22 @@ module Helpers
     asc_diag(curr, dest)
   end
 
-  def desc_diag(curr, dest, path = [])
-    if dest[0] > curr[0]
-      until curr == dest
-        # Increments both letter and num coordinate to simulate
-        # downward diagonal movement to the right.
-        curr = "#{increment(curr[0])}#{increment(curr[1])}"
-        path << curr unless curr == dest
-      end
-    else
-      until curr == dest
-        # Decrements letter and increments num coordinate to simulate
-        # downward diagonal movement to the left.
-        curr = "#{decrement(curr[0])}#{increment(curr[1])}"
-        path << curr unless curr == dest
-      end
-    end
+  def desc_diag(curr, dest)
+    return get_path(curr, dest, 'increment', 'increment') if dest[0] > curr[0]
 
-    path
+    # Decrements letter and increments num coordinate to simulate
+    # downward diagonal movement to the left.
+    get_path(curr, dest, 'decrement', 'increment')
   end
 
-  def asc_diag(curr, dest, path = [])
-    if dest[0] > curr[0]
-      until curr == dest
-        # Increments letter and decrements num coordinate to simulate
-        # upward diagonal movement to the right.
-        curr = "#{increment(curr[0])}#{decrement(curr[1])}"
-        path << curr unless curr == dest
-      end
-    else
-      until curr == dest
-        # Decrements both letter and num coordinate to simulate
-        # upward diagonal movement to the left.
-        curr = "#{decrement(curr[0])}#{decrement(curr[1])}"
-        path << curr unless curr == dest
-      end
-    end
+  def asc_diag(curr, dest)
+    # Increments letter and decrements num coordinate to simulate
+    # upward diagonal movement to the right.
+    return get_path(curr, dest, 'increment', 'decrement') if dest[0] > curr[0]
 
-    path
+    # Decrements both letter and num coordinate to simulate
+    # upward diagonal movement to the left.
+    get_path(curr, dest, 'decrement', 'decrement')
   end
 
   def find_vert_path(curr, dest)
@@ -142,48 +156,28 @@ module Helpers
     asc_vert(curr, dest)
   end
 
-  def desc_vert(curr, dest, path = [])
-    until curr == dest
-      # Increments num coordinate to simulate downward vertical movement.
-      curr = "#{curr[0]}#{increment(curr[1])}"
-      path << curr unless curr == dest
-    end
-
-    path
+  def desc_vert(curr, dest)
+    # Increments num coordinate to simulate downward vertical movement.
+    get_path(curr, dest, '', 'increment')
   end
 
-  def asc_vert(curr, dest, path = [])
-    until curr == dest
-      curr = "#{curr[0]}#{decrement(curr[1])}"
-      path << curr unless curr == dest
-    end
-
-    path
+  def asc_vert(curr, dest)
+    get_path(curr, dest, '', 'decrement')
   end
 
   def find_horiz_path(curr, dest)
     # Returns the left or right horizontal path.
-    return left_horiz(curr, dest) if dest[0] > curr[0]
+    return right_horiz(curr, dest) if dest[0] > curr[0]
 
-    right_horiz(curr, dest)
+    left_horiz(curr, dest)
   end
 
-  def left_horiz(curr, dest, path = [])
-    until curr == dest
-      curr = "#{decrement(curr[0])}#{curr[1]}"
-      path << curr unless curr == dest
-    end
-
-    path
+  def left_horiz(curr, dest)
+    get_path(curr, dest, 'decrement', '')
   end
 
-  def right_horiz(curr, dest, path = [])
-    until curr == dest
-      curr = "#{increment(curr[0])}#{curr[1]}"
-      path << curr unless curr == dest
-    end
-
-    path
+  def right_horiz(curr, dest)
+    get_path(curr, dest, 'increment', '')
   end
 
   def obstructed?(path, board, piece, obstructed = false)

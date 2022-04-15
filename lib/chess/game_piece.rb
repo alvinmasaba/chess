@@ -8,8 +8,6 @@ class GamePiece
 
   attr_accessor :position, :color, :symbol, :first_move, :name, :can_jump
 
-  EMPTY_SQUARE = "\u0020"
-
   def initialize(position = nil, color = :white, name = 'name',
                  symbol = { 'white': "\u2659", 'black': "\u265F" })
     @position = position
@@ -19,8 +17,6 @@ class GamePiece
     @name = name
     @can_jump = false
   end
-
-  private
 
   def change_position(new_position)
     @position = new_position

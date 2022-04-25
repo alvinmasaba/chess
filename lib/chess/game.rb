@@ -9,7 +9,7 @@ require_relative 'chess_helpers'
 class Game
   include Helpers
 
-  attr_accessor :player1, :player2, :board, :finished, :turn, :selected_piece
+  attr_accessor :player1, :player2, :board, :finished, :turn
 
   def initialize
     @board = GameBoard.new
@@ -17,7 +17,6 @@ class Game
     @player2 = Player.new('Player 2', :black, @board)
     @turn = @player1
     @finished = false
-    @selected_piece = nil
   end
 
   def play
@@ -32,6 +31,24 @@ class Game
       @board.display_board
       change_turn
     end
+  end
+
+  def check
+    # Returns move tree for each of the player's pieces.
+    @turn.collect_pieces.each do |piece|
+      move_tree = return_move_tree(piece)
+
+      opp = @turn == @player1 ? @player2 : @player1
+
+      # Finds the position of the opponent's king.
+      opp_king = opp.pieces.select { |opp_piece| opp_piece.name == 'King' }
+                    .position
+
+      # Returns true if the king's position is in the move tree.
+      return true if move_tree.include?(opp_king)
+    end
+
+    false
   end
 
   private

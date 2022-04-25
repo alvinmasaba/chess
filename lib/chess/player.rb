@@ -45,7 +45,9 @@ class Player
     @selected_piece.first_move = false if @selected_piece.first_move
   end
 
-  private
+  def put_in_check
+    @in_check = true
+  end
 
   def collect_pieces(pieces = [])
     @board.board.each do |row|
@@ -56,6 +58,8 @@ class Player
 
     pieces
   end
+
+  private
 
   def enter_destination
     puts "\nEnter the coordinates of the square you want to move to:\n"

@@ -18,6 +18,13 @@ class GamePiece
     @can_jump = false
   end
 
+  def valid_pos?(pos)
+    return false unless super
+
+    # Returns false if the entered position is the piece's own position.
+    pos != @position
+  end
+
   def change_position(new_position)
     @position = new_position
   end

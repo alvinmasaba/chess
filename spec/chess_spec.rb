@@ -4,6 +4,25 @@ require './lib/chess/game_piece'
 require './lib/chess/game'
 require './lib/chess/player'
 
+describe Game do
+  describe '#check' do
+    context 'when opponent\'s King is in check' do
+      subject(:opp_in_check) { described_class.new }
+      let(:queen) { instance_double(Queen, position: 'E2', color: :white) }
+
+      it 'returns true' do
+        # It is player1's turn by default, so place one of their [white]
+        # pieces adjacent to player2's [black] king. In this case, because
+        # the king is at E1, we place a white queen directly in front of it
+        # at E2.
+        opp_in_check.board.board[1][4] = queen
+
+        expect(opp_in_check.check).to be_truthy
+      end
+    end
+  end
+end
+
 describe Player do
   subject(:player_move) { described_class.new('Player 1', :white) }
   let(:game_board) { instance_double(GameBoard) }
@@ -17,19 +36,6 @@ describe Pawn do
   valid_pos = 'B2'
   valid_first_move = 'B3'
   invalid_pos = 'C1'
-
-  describe '#move' do
-    context 'when a valid position is entered and first_move is true' do
-      before do
-        allow(pawn_move).to receive(:gets).and_return(valid_pos)
-        allow(pawn_move).to receive(:valid_pos?).with(valid_pos).and_return(true)
-      end
-
-      it 'changes first_move to false' do
-        expect { pawn_move.move_piece }.to change { pawn_move.first_move }.from(true).to(false)
-      end
-    end
-  end
 
   describe '#valid_pos?' do
     context 'when a valid position is entered' do

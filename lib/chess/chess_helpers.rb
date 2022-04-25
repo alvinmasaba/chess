@@ -67,6 +67,21 @@ module Helpers
     /[A-Ha-h][1-8]/.match?(pos)
   end
 
+  def valid_dest?(dest, board, selected_piece)
+    return false unless selected_piece.valid_pos?(dest) &&
+                        dest != selected_piece.position
+
+    # Return false unless destination is empty or contains an opp piece.
+    val = find_piece(dest, board.board)
+    return false unless val == "\u0020" || val.color != @color
+
+    return true if selected_piece.can_jump
+
+    path = find_path(selected_piece.position, dest)
+
+    obstructed?(path, board.board, selected_piece) ? false : true
+  end
+
   def color_match?(color1, color2)
     color1 == color2
   end

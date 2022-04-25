@@ -34,18 +34,17 @@ class Game
   end
 
   def check
+    p @board
     # Returns move tree for each of the player's pieces.
     @turn.collect_pieces.each do |piece|
-      move_tree = return_move_tree(piece)
-
       opp = @turn == @player1 ? @player2 : @player1
 
       # Finds the position of the opponent's king.
       opp_king = opp.pieces.select { |opp_piece| opp_piece.name == 'King' }
+                    .fetch(0)
                     .position
-
       # Returns true if the king's position is in the move tree.
-      return true if move_tree.include?(opp_king)
+      return true if valid_dest?(opp_king, @board, piece)
     end
 
     false

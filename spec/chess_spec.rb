@@ -15,6 +15,7 @@ describe Game do
         # pieces adjacent to player2's [black] king. In this case, because
         # the king is at E1, we place a white queen directly in front of it
         # at E2.
+        allow(queen).to receive(:valid_pos?)
         opp_in_check.board.board[1][4] = queen
 
         expect(opp_in_check.check).to be_truthy

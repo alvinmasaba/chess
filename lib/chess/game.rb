@@ -29,22 +29,25 @@ class Game
       puts "\n#{@turn.name}, it's your turn."
       @turn.move
       @board.display_board
+      puts "\nCheck." if check
       change_turn
     end
   end
 
   def check
-    p @board
-    # Returns move tree for each of the player's pieces.
-    @turn.collect_pieces.each do |piece|
+    # Iterates through player's pieces.
+    @turn.pieces.each do |piece|
       opp = @turn == @player1 ? @player2 : @player1
 
       # Finds the position of the opponent's king.
       opp_king = opp.pieces.select { |opp_piece| opp_piece.name == 'King' }
                     .fetch(0)
-                    .position
-      # Returns true if the king's position is in the move tree.
-      return true if valid_dest?(opp_king, @board, piece)
+
+      # Returns true if the king's position is a valid destination.
+      next unless valid_dest?(opp_king.position, @board, piece)
+
+      opp.in_check = true
+      return true
     end
 
     false

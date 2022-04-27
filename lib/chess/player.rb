@@ -111,6 +111,6 @@ class Player
   end
 
   def opp_piece?(piece)
-    piece.is_a?(GamePiece) && color_match?(piece.color, @color)
+    piece.is_a?(GamePiece) && !color_match?(piece.color, @color)
   end
 end

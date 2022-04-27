@@ -26,31 +26,27 @@ class Game
     @board.display_board
 
     until @finished
+      puts "\nCheck." if @turn.in_check
       puts "\n#{@turn.name}, it's your turn."
       @turn.move
       @board.display_board
-      puts "\nCheck." if check
       change_turn
     end
   end
 
   def check
-    # Iterates through player's pieces.
-    @turn.pieces.each do |piece|
-      opp = @turn == @player1 ? @player2 : @player1
+    # Iterates through opponent's pieces.
+    opp = @turn == @player1 ? @player2 : @player1
 
-      # Finds the position of the opponent's king.
-      opp_king = opp.pieces.select { |opp_piece| opp_piece.name == 'King' }
-                    .fetch(0)
+    opp.pieces.each do |piece|
+      king = @turn.pieces.select { |plyr_piece| plyr_piece.name == 'King' }
+                  .fetch(0)
 
       # Returns true if the king's position is a valid destination.
-      next unless valid_dest?(opp_king.position, @board, piece)
+      next unless valid_dest?(king.position, @board, piece)
 
-      opp.in_check = true
-      return true
+      @turn.in_check = true
     end
-
-    false
   end
 
   private

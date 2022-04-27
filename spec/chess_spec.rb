@@ -6,47 +6,29 @@ require './lib/chess/player'
 
 describe Game do
   describe '#check' do
-    context 'when opponent\'s King is in check' do
-      subject(:opp_in_check) { described_class.new }
+    context 'when King is in check' do
+      subject(:in_check) { described_class.new }
 
-      it 'returns true' do
-        # It is player1's turn by default, so place one of their [white]
-        # pieces adjacent to player2's [black] king. In this case, because
-        # the king is at E1, we place a white queen directly in front of it
-        # at E2.
-
-        opp_in_check.turn.pieces.each do |piece|
-          piece.position = 'E2' if piece.is_a?(Queen)
+      it 'changes in_check to true' do
+        in_check.player2.pieces.each do |piece|
+          piece.position = 'E7' if piece.is_a?(Queen)
         end
 
-        expect(opp_in_check.check).to be_truthy
-      end
+        in_check.check
 
-      it 'changes opponent\'s in_check to true' do
-        opp_in_check.board.board[1] = Array.new(8, "\u0020")
-
-        opp_in_check.turn.pieces.each do |piece|
-          piece.position = 'B4' if piece.is_a?(Queen)
-        end
-
-        opp_in_check.check
-
-        expect(opp_in_check.player2.in_check).to be_truthy
+        expect(in_check.turn.in_check).to be_truthy
       end
     end
 
-    context 'when opponent\'s King is not in check' do
+    context 'when King is not in check' do
       subject(:not_in_check) { described_class.new }
 
-      it 'returns false' do
-        # Should return false at start of game
-        expect(not_in_check.check).to be false
-      end
+      it 'expect in_check to be false' do
+        not_in_check.player2.pieces.each do |piece|
+          piece.position = 'D4' if piece.is_a?(Queen)
+        end
 
-      it 'does not change opponent\'s in_check to true' do
-        not_in_check.check
-
-        expect(not_in_check.player2.in_check).to_not be_truthy
+        expect(not_in_check.turn.in_check).to be false
       end
     end
   end

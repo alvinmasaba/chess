@@ -24,18 +24,38 @@ class Player
     puts "\n#{@name}, you control the #{@color} pieces."
   end
 
-  def move
-    select_piece
+  def move(opponent)
+    check(opponent)
+    puts "\n#{@name}, it's your move."
+    destination = in_check ? until_not_in_check(opponent) : return_valid_dest
+    move_piece(destination)
+  end
 
-    destination = enter_destination
+  def checkmate(check = true)
+    # Make each valid move in the game and check if player is still in check.
+    @pieces.each do |piece|
+    end
+  end
 
-    until valid_dest?(destination, @board, @selected_piece)
-      puts "\nInvalid move. Re-enter the coordinates you wish to move to or enter 1 to select a different piece:\n"
+  def check(opponent, check = false)
+    # Iterates through opponent's pieces.
+    opponent.pieces.each do |piece|
+      king = @pieces.select { |plyr_piece| plyr_piece.name == 'King' }
+                    .fetch(0)
 
-      input = gets.chomp.downcase
-      destination = reenter_destination(input)
+      # Returns true if the king's position is a valid destination.
+      next unless valid_dest?(king.position, @board, piece)
+
+      check = true
+      puts "\n#{@name} is in check."
     end
 
+    @in_check = check
+  end
+
+  private
+
+  def move_piece(destination)
     # Takes the piece if there is an opponent piece present at destination.
     take_piece(find_piece(destination, @board.board))
 
@@ -43,10 +63,6 @@ class Player
 
     # Sets selected piece's first move to false if it was its first move.
     @selected_piece.first_move = false if @selected_piece.first_move
-  end
-
-  def put_in_check
-    @in_check = true
   end
 
   def collect_pieces(pieces = [])
@@ -59,7 +75,29 @@ class Player
     pieces
   end
 
-  private
+  def return_valid_dest
+    select_piece
+    destination = enter_destination
+    until_valid_dest(destination)
+  end
+
+  def until_not_in_check(opponent)
+    while @in_check
+      select_piece
+      old_position = @selected_piece.position
+      destination = enter_destination
+      destination = until_valid_dest(destination)
+
+      # Change the piece's position and then check if the king is still in check.
+      @selected_piece.change_position(destination)
+      check(opponent)
+
+      # Revert the piece's position if still in check.
+      @selected_piece.change_position(old_position)
+    end
+
+    destination
+  end
 
   def enter_destination
     puts "\nEnter the coordinates of the square you want to move to:\n"
@@ -74,6 +112,17 @@ class Player
       destination = enter_destination
     else
       destination = input
+    end
+
+    destination
+  end
+
+  def until_valid_dest(destination)
+    until valid_dest?(destination, @board, @selected_piece)
+      puts "\nInvalid move. Re-enter the coordinates you wish to move to or enter 1 to select a different piece:\n"
+
+      input = gets.chomp.downcase
+      destination = reenter_destination(input)
     end
 
     destination
@@ -101,7 +150,7 @@ class Player
       # If the entered position contains a GamePiece with the same color as the
       # player selecting it, sets @selected_piece to that piece. Else, calls
       # select_piece recursively.
-      piece = opp_piece?(piece) ? piece : select_piece
+      piece = opp_piece?(piece) ? select_piece : piece
     else
       puts "\nYou can only select one of your OWN pieces."
       piece = select_piece
@@ -111,6 +160,6 @@ class Player
   end
 
   def opp_piece?(piece)
-    piece.is_a?(GamePiece) && !color_match?(piece.color, @color)
+    piece.is_a?(GamePiece) && (piece.color != @color)
   end
 end

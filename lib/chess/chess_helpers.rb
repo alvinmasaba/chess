@@ -73,17 +73,13 @@ module Helpers
 
     # Return false unless destination is empty or contains an opp piece.
     val = find_piece(dest, board.board)
-    return false unless val == "\u0020" || val.color != @color
+    return false unless val == "\u0020" || val.color != selected_piece.color
 
     return true if selected_piece.can_jump
 
     path = find_path(selected_piece.position, dest)
 
     obstructed?(path, board.board, selected_piece) ? false : true
-  end
-
-  def color_match?(color1, color2)
-    color1 == color2
   end
 
   def step(c, delta = 1)

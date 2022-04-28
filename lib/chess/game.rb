@@ -20,32 +20,14 @@ class Game
   end
 
   def play
-    # intro
-    @player1.choose_name
-    @player2.choose_name
-    @board.display_board
+    start_game
 
     until @finished
-      puts "\nCheck." if @turn.in_check
-      puts "\n#{@turn.name}, it's your turn."
-      @turn.move
+      opp = @turn == @player1 ? @player2 : @player1
+
+      @turn.move(opp)
       @board.display_board
       change_turn
-    end
-  end
-
-  def check
-    # Iterates through opponent's pieces.
-    opp = @turn == @player1 ? @player2 : @player1
-
-    opp.pieces.each do |piece|
-      king = @turn.pieces.select { |plyr_piece| plyr_piece.name == 'King' }
-                  .fetch(0)
-
-      # Returns true if the king's position is a valid destination.
-      next unless valid_dest?(king.position, @board, piece)
-
-      @turn.in_check = true
     end
   end
 
@@ -53,5 +35,12 @@ class Game
 
   def change_turn
     @turn = @turn == @player1 ? @player2 : @player1
+  end
+
+  def start_game
+    # intro
+    @player1.choose_name
+    @player2.choose_name
+    @board.display_board
   end
 end

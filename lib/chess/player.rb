@@ -25,16 +25,45 @@ class Player
   end
 
   def move(opponent)
-    check(opponent)
+    @in_check = check(opponent)
+    
+    # Checks for checkmate if in check.
+    if @in_check
+      puts "\nCheckmate." if checkmate(opponent) 
+
+    puts "\nCheck." if @in_check
+    
     puts "\n#{@name}, it's your move."
-    destination = in_check ? until_not_in_check(opponent) : return_valid_dest
+
+    destination = @in_check ? until_not_in_check(opponent) : return_valid_dest
     move_piece(destination)
   end
 
-  def checkmate(check = true)
+  def checkmate(opponent, pos = 'A1')
     # Make each valid move in the game and check if player is still in check.
     @pieces.each do |piece|
+      og_position = piece.position
+
+      until pos == 'H8'
+        # If pos is a valid destination, move the piece there and run check
+        if valid_dest?(pos, @board, piece)
+          piece.position = pos
+
+          # Return false if check returns false
+          return false unless check(opponent)
+        end
+
+        piece.position = og_position
+
+        if pos[1] == '8'
+          "#{increment(pos[0])}#{increment(pos[1])}"
+        else
+          "#{pos[0]}#{increment(pos[1])}"
+        end
+      end
     end
+
+    true
   end
 
   def check(opponent, check = false)
@@ -47,10 +76,9 @@ class Player
       next unless valid_dest?(king.position, @board, piece)
 
       check = true
-      puts "\n#{@name} is in check."
     end
 
-    @in_check = check
+    check
   end
 
   private

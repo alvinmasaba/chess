@@ -6,7 +6,7 @@ class Player
   include Helpers
 
   attr_accessor :name, :color, :board, :selected_piece, :pieces,
-                :taken_pieces, :in_check, :in_checkmate
+                :taken_pieces, :in_check
 
   def initialize(name, color, board)
     @in_check = false
@@ -25,60 +25,8 @@ class Player
   end
 
   def move(opponent)
-    @in_check = check(opponent)
-    
-    # Checks for checkmate if in check.
-    if @in_check
-      puts "\nCheckmate." if checkmate(opponent) 
-
-    puts "\nCheck." if @in_check
-    
-    puts "\n#{@name}, it's your move."
-
     destination = @in_check ? until_not_in_check(opponent) : return_valid_dest
     move_piece(destination)
-  end
-
-  def checkmate(opponent, pos = 'A1')
-    # Make each valid move in the game and check if player is still in check.
-    @pieces.each do |piece|
-      og_position = piece.position
-
-      until pos == 'H8'
-        # If pos is a valid destination, move the piece there and run check
-        if valid_dest?(pos, @board, piece)
-          piece.position = pos
-
-          # Return false if check returns false
-          return false unless check(opponent)
-        end
-
-        piece.position = og_position
-
-        if pos[1] == '8'
-          "#{increment(pos[0])}#{increment(pos[1])}"
-        else
-          "#{pos[0]}#{increment(pos[1])}"
-        end
-      end
-    end
-
-    true
-  end
-
-  def check(opponent, check = false)
-    # Iterates through opponent's pieces.
-    opponent.pieces.each do |piece|
-      king = @pieces.select { |plyr_piece| plyr_piece.name == 'King' }
-                    .fetch(0)
-
-      # Returns true if the king's position is a valid destination.
-      next unless valid_dest?(king.position, @board, piece)
-
-      check = true
-    end
-
-    check
   end
 
   private

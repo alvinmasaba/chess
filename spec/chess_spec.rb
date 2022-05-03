@@ -10,11 +10,13 @@ describe Game do
       subject(:in_check) { described_class.new }
 
       it 'changes in_check to true' do
+        # Places white Queen directly adjacent to black King at E8.
         in_check.player2.pieces.each do |piece|
           piece.position = 'E7' if piece.is_a?(Queen)
         end
 
-        in_check.check
+        opp = in_check.player2
+        in_check.check(opp)
 
         expect(in_check.turn.in_check).to be_truthy
       end
@@ -24,6 +26,7 @@ describe Game do
       subject(:not_in_check) { described_class.new }
 
       it 'expect in_check to be false' do
+        # Places white Queen out of range of black King at E8.
         not_in_check.player2.pieces.each do |piece|
           piece.position = 'D4' if piece.is_a?(Queen)
         end

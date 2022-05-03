@@ -6,7 +6,7 @@ require_relative 'chess_helpers'
 class GamePiece
   include Helpers
 
-  attr_accessor :position, :color, :symbol, :first_move, :name, :can_jump
+  attr_accessor :position, :color, :symbol, :first_move, :name, :can_jump, :move_back
 
   def initialize(position = nil, color = :white, name = 'name',
                  symbol = { 'white': "\u2659", 'black': "\u265F" })
@@ -16,6 +16,7 @@ class GamePiece
     @first_move = true
     @name = name
     @can_jump = false
+    @move_back = true
   end
 
   def valid_pos?(pos)
@@ -123,6 +124,7 @@ class Pawn < GamePiece
   def initialize(position = nil, color = :white, name = 'Pawn',
                  symbol = { 'white': "\u265F", 'black': "\u2659" })
     super
+    @move_back = false
   end
 
   def valid_pos?(pos)

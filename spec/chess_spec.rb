@@ -35,6 +35,54 @@ describe Game do
       end
     end
   end
+
+  describe '#checkmate' do
+    context 'when King is in checkmate' do
+      subject(:in_checkmate) { described_class.new }
+
+      it 'the game is finished' do
+        in_checkmate.turn.pieces.each do |piece|
+          # Places white Queen at F2.
+          piece.position = 'F2' if piece.is_a?(Queen)
+          # Places white bishop at C5.
+          piece.position = 'C5' if piece.position == 'F8'
+        end
+
+        in_checkmate.player2.pieces.each do |piece|
+          # Moves pawn at E2.
+          piece.position = 'E4' if piece.position == 'E2'
+        end
+
+        # Changes turn as checkmate runs after turn completion.
+        in_checkmate.turn = in_checkmate.player2
+
+        in_checkmate.checkmate(in_checkmate.player1)
+
+        expect(in_checkmate.finished).to be_truthy
+      end
+    end
+
+    context 'when King is not in checkmate' do
+      subject(:no_checkmate) { described_class.new }
+
+      it 'the game is not finished' do
+        # Places pieces in a non-checkmate position.
+        no_checkmate.turn.pieces.each do |piece|
+          piece.position = 'F5' if piece.is_a?(Queen)
+          piece.position = 'C5' if piece.position == 'F8'
+        end
+
+        no_checkmate.player2.pieces.each do |piece|
+          piece.position = 'E4' if piece.position == 'E2'
+        end
+
+        no_checkmate.turn = no_checkmate.player2
+        no_checkmate.checkmate(no_checkmate.player1)
+
+        expect(no_checkmate.finished).to be(false)
+      end
+    end
+  end
 end
 
 describe Player do

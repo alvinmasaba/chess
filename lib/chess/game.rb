@@ -16,7 +16,7 @@ class Game
     @player1 = Player.new('Player 1', :white, @board)
     @player2 = Player.new('Player 2', :black, @board)
     @turn = @player1
-    @checkmate = false
+    @finished = false
   end
 
   def play
@@ -31,7 +31,11 @@ class Game
     puts "\nCheckmate. #{@turn.name} is the winner."
   end
 
-  def check(opponent, check = false)
+  def check(opponent)
+    @turn.in_check = king_in_check?(opponent)
+  end
+
+  def king_in_check?(opponent, check = false)
     # Iterates through opponent's pieces.
     opponent.pieces.each do |piece|
       king = @turn.pieces.select { |plyr_piece| plyr_piece.name == 'King' }
@@ -43,10 +47,10 @@ class Game
       check = true
     end
 
-    @turn.in_check = check
+    check
   end
 
-  def checkmate(opponent, pos = 'A1')
+  def checkmate(opponent, pos = 'A1', checkmate = true)
     # Make each valid move in the game and check if player is still in check.
     @turn.pieces.each do |piece|
       og_position = piece.position
@@ -57,16 +61,18 @@ class Game
           piece.position = pos
 
           # Return false if check returns false
-          return false unless check(opponent)
+          checkmate = false unless king_in_check?(opponent)
         end
 
         piece.position = og_position
 
         pos = increment_pos(pos)
       end
+
+      pos = 'A1'
     end
 
-    @finished = true
+    @finished = checkmate
   end
 
   private
@@ -105,10 +111,10 @@ class Game
   end
 
   def increment_pos(pos)
-    if pos[1] == '8'
-      "#{increment(pos[0])}#{increment(pos[1])}"
+    if pos[0] == 'H'
+      "A#{increment(pos[1])}"
     else
-      "#{pos[0]}#{increment(pos[1])}"
+      "#{increment(pos[0])}#{pos[1]}"
     end
   end
 end

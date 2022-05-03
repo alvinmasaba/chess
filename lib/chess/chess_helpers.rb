@@ -202,8 +202,6 @@ module Helpers
       obstructed = true
     end
 
-    puts 'Invalid move.' if obstructed
-
     obstructed
   end
 end

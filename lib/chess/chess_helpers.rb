@@ -22,7 +22,7 @@ module Helpers
     y2 = dest[1].to_i
 
     # Return the change in x and the change in y.
-    [(x1 - x2), (y1 - y2)]
+    [(x2 - x1), (y2 - y1)]
   end
 
   def invalid_sizes(pos, dest)

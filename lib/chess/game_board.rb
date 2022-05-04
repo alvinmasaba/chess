@@ -30,6 +30,12 @@ class GameBoard
 
   def initialize
     @board = create_board
+
+    @board.each do |row|
+      row.each do |piece|
+        piece.board = self if piece.is_a?(Pawn)
+      end
+    end
   end
 
   def display_board(idx = 1)

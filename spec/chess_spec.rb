@@ -93,11 +93,13 @@ describe Player do
 end
 
 describe Pawn do
+  let(:game_board) { instance_double(GameBoard) }
   subject(:pawn_move) { described_class.new('B1') }
 
   valid_pos = 'B2'
   valid_first_move = 'B3'
   invalid_pos = 'C1'
+  adj_pos = 'C2'
 
   describe '#valid_pos?' do
     context 'when a valid position is entered' do
@@ -126,11 +128,55 @@ describe Pawn do
       end
     end
 
+    context 'when a backward position is entered' do
+      subject(:pawn_move) { described_class.new('B3') }
+
+      it 'returns false' do
+        expect(pawn_move.valid_pos?('B2')).to_not be_truthy
+      end
+    end
+
     context 'when its current position is entered' do
       it 'returns false' do
         expect(pawn_move.valid_pos?(pawn_move.position)).to_not be_truthy
       end
     end
+  end
+
+  describe '#adjacent_opp' do
+    context 'when a diagonal position containing an opp piece is entered' do
+      before do
+        allow(pawn_move).to receive(:find_piece).and_return(GamePiece.new('C2', :black))
+      end
+
+      it 'returns true' do
+        pawn_move.board = GameBoard.new
+        expect(pawn_move.adjacent_opp(adj_pos)).to be_truthy
+      end
+    end
+
+    context 'when a diagonal position containing own piece is entered' do
+      before do
+        allow(pawn_move).to receive(:find_piece).and_return(GamePiece.new('C2', :white))
+      end
+
+      it 'returns false' do
+        pawn_move.board = GameBoard.new
+        expect(pawn_move.adjacent_opp(adj_pos)).to_not be_truthy
+      end
+    end
+
+    context 'when a diagonal position containing no piece is entered' do
+      before do
+        allow(pawn_move).to receive(:find_piece).and_return("\u0020")
+      end
+
+      it 'returns false' do
+        pawn_move.board = GameBoard.new
+        expect(pawn_move.adjacent_opp(adj_pos)).to_not be_truthy
+      end
+    end
+
   end
 end
 

@@ -6,7 +6,7 @@ require_relative 'chess_helpers'
 class GamePiece
   include Helpers
 
-  attr_accessor :position, :color, :symbol, :first_move, :name, :can_jump, :move_back
+  attr_accessor :position, :color, :symbol, :first_move, :name, :can_jump
 
   def initialize(position = nil, color = :white, name = 'name',
                  symbol = { 'white': "\u2659", 'black': "\u265F" })
@@ -16,7 +16,6 @@ class GamePiece
     @first_move = true
     @name = name
     @can_jump = false
-    @move_back = true
   end
 
   def valid_pos?(pos)
@@ -122,10 +121,12 @@ end
 
 # Creates a game piece which moves like a King
 class Pawn < GamePiece
+  attr_accessor :board
+
   def initialize(position = nil, color = :white, name = 'Pawn',
                  symbol = { 'white': "\u265F", 'black': "\u2659" })
     super
-    @move_back = false
+    @board = nil
   end
 
   def valid_pos?(pos)
@@ -133,10 +134,21 @@ class Pawn < GamePiece
 
     change = change_in_coordinates(position, pos)
 
-    if first_move
+    # In the case the destination is on a diagonal.
+    if change == [1, 1] || change == [-1, 1]
+      adjacent_opp(pos)
+    elsif first_move
       [[0, 1], [0, 2]].include?(change)
     else
       change == [0, 1]
     end
+  end
+
+  def adjacent_opp(dest)
+    piece = find_piece(dest, @board.board)
+
+    # Returns true if the destination contains an opponent's piece.
+    # Otherwise returns false.
+    piece.is_a?(GamePiece) && (piece.color != @color)
   end
 end

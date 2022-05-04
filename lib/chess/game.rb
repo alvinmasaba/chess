@@ -38,6 +38,8 @@ class Game
   def king_in_check?(opponent, check = false)
     # Iterates through opponent's pieces.
     opponent.pieces.each do |piece|
+      next if piece.position.nil?
+
       king = @turn.pieces.select { |plyr_piece| plyr_piece.name == 'King' }
                   .fetch(0)
 
@@ -53,6 +55,8 @@ class Game
   def checkmate(opponent, pos = 'A1', checkmate = true)
     # Make each valid move in the game and check if player is still in check.
     @turn.pieces.each do |piece|
+      next if piece.position.nil?
+
       og_position = piece.position
 
       until pos == 'H8'

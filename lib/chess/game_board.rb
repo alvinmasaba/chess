@@ -99,10 +99,12 @@ class GameBoard
       row.each do |val|
         # If val is a GamePiece, find its equivalent nested array location based
         # on its position value, and insert into temp board at that index.
-        if val.is_a?(GamePiece)
-          coord = convert_to_coordinates(val.position)
-          temp_board[coord[0]][coord[1]] = val
-        end
+        next unless val.is_a?(GamePiece)
+
+        next if val.position.nil?
+
+        coord = convert_to_coordinates(val.position)
+        temp_board[coord[0]][coord[1]] = val
       end
     end
 

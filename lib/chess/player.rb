@@ -126,7 +126,7 @@ class Player
       # If the entered position contains a GamePiece with the same color as the
       # player selecting it, sets @selected_piece to that piece. Else, calls
       # select_piece recursively.
-      piece = opp_piece?(piece) ? select_piece : piece
+      piece = opp_piece?(piece) || piece == EMPTY_SQUARE ? select_piece : piece
     else
       puts "\nYou can only select one of your OWN pieces."
       piece = select_piece

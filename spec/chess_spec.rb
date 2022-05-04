@@ -282,8 +282,10 @@ describe Queen do
     end
 
     context 'when a valid diagonal position is entered' do
+      subject(:queen_move) { described_class.new('D8') }
+
       it 'returns true' do
-        expect(queen_move.valid_pos?(valid_diagonal)).to be_truthy
+        expect(queen_move.valid_pos?('H4')).to be_truthy
       end
     end
 

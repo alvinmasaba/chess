@@ -98,7 +98,7 @@ class Queen < GamePiece
     if position[0].match?(pos[0]) || position[1].match?(pos[1])
       true
     else
-      change[0] == change[1]
+      change[0].abs == change[1].abs
     end
   end
 end

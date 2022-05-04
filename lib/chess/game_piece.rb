@@ -60,7 +60,7 @@ class Bishop < GamePiece
     # A valid position is the same absolute distance removed from the origin on
     # both the x and y axis. E.g. [2,-2], [-5,5], [-1,-1], [3,3].
     change = change_in_coordinates(position, pos)
-    change[0] == change[1]
+    change[0].abs == change[1].abs
   end
 end
 
@@ -78,6 +78,7 @@ class Knight < GamePiece
     # A valid position has an absolute distance removed of either [1, 2]
     # or [2, 1] in terms of x and y.
     change = change_in_coordinates(position, pos)
+    change = [change[0].abs, change[1].abs]
     change.include?(1) && change.include?(2)
   end
 end
@@ -115,7 +116,7 @@ class King < GamePiece
 
     # A King can move at most 1 space in any direction.
     change = change_in_coordinates(position, pos)
-    change.all? { |val| val.between?(0, 1) }
+    change.all? { |val| val.between?(-1, 1) }
   end
 end
 

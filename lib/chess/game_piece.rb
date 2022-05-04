@@ -135,13 +135,7 @@ class Pawn < GamePiece
     change = change_in_coordinates(position, pos)
 
     # In the case the destination is on a diagonal.
-    if change == [1, 1] || change == [-1, 1]
-      adjacent_opp(pos)
-    elsif first_move
-      [[0, 1], [0, 2]].include?(change)
-    else
-      change == [0, 1]
-    end
+    @color == :white ? pawn_move(pos, change, -1) : pawn_move(pos, change, 1)
   end
 
   def adjacent_opp(dest)
@@ -150,5 +144,15 @@ class Pawn < GamePiece
     # Returns true if the destination contains an opponent's piece.
     # Otherwise returns false.
     piece.is_a?(GamePiece) && (piece.color != @color)
+  end
+
+  def pawn_move(pos, change, num)
+    if change == [1, 1 * num] || change == [-1, 1 * num]
+      adjacent_opp(pos)
+    elsif @first_move
+      [[0, 1 * num], [0, 2 * num]].include?(change)
+    else
+      change == [0, 1 * num]
+    end
   end
 end

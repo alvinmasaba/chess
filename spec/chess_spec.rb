@@ -94,12 +94,12 @@ end
 
 describe Pawn do
   let(:game_board) { instance_double(GameBoard) }
-  subject(:pawn_move) { described_class.new('B1') }
+  subject(:pawn_move) { described_class.new('B7') }
 
-  valid_pos = 'B2'
-  valid_first_move = 'B3'
+  valid_pos = 'B6'
+  valid_first_move = 'B5'
   invalid_pos = 'C1'
-  adj_pos = 'C2'
+  adj_pos = 'C6'
 
   describe '#valid_pos?' do
     context 'when a valid position is entered' do
@@ -129,10 +129,10 @@ describe Pawn do
     end
 
     context 'when a backward position is entered' do
-      subject(:pawn_move) { described_class.new('B3') }
+      subject(:pawn_move) { described_class.new('B5') }
 
       it 'returns false' do
-        expect(pawn_move.valid_pos?('B2')).to_not be_truthy
+        expect(pawn_move.valid_pos?('B6')).to_not be_truthy
       end
     end
 
@@ -176,7 +176,6 @@ describe Pawn do
         expect(pawn_move.adjacent_opp(adj_pos)).to_not be_truthy
       end
     end
-
   end
 end
 

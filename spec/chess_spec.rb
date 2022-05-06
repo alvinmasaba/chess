@@ -56,8 +56,6 @@ describe Game do
       end
 
       it 'the game is finished' do
-
-        in_checkmate.board.display_board
         # Changes turn as checkmate runs after turn completion.
         in_checkmate.turn = in_checkmate.player2
 

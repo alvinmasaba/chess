@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'json'
+require_relative 'game_serializer'
 require_relative 'game_board'
 require_relative 'game_piece'
 require_relative 'player'
@@ -7,6 +9,7 @@ require_relative 'chess_helpers'
 
 # Plays a complete game of chess
 class Game
+  include GameSerializer
   include Helpers
 
   attr_accessor :player1, :player2, :board, :turn, :finished

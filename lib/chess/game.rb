@@ -101,7 +101,7 @@ class Game
   end
 
   def start_game
-    # intro
+    intro
     @player1.choose_name
     @player2.choose_name
     @board.display_board

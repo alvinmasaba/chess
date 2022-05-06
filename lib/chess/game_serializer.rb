@@ -50,4 +50,42 @@ module GameSerializer
 
     create_game_file(name_file)
   end
+
+  def show_saved_games(games)
+    puts "\nSaved Games:\n"
+
+    games.each_with_index do |fname, i|
+      puts "#{i + 1}: #{fname}\n"
+    end
+
+    puts "\Enter the number of the game you would like to load.\n"
+  end
+
+  def check_for_saved_games
+    if Dir.exist?('saved_games') && !Dir.empty('saved_games/*')
+      saved_games = Dir.glob('saved_games/*')
+      show_saved_games(saved_games)
+      saved_game = gets.chomp.to_i - 1
+      game = Game.new
+      game.load(saved_games[saved_game])
+
+    else
+      puts "You don't have any saved games. Starting a new game.\n"
+      Game.new
+    end
+  end
+
+  def pick_game
+    case gets.chomp
+    when '1'
+      game = Game.new
+    when '2'
+      game = check_for_saved_games
+    else
+      puts "\nPlease enter 1 or 2:\n"
+      game = pick_game
+    end
+
+    game
+  end
 end

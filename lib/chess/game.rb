@@ -32,24 +32,7 @@ class Game
   end
 
   def check(opponent)
-    @turn.in_check = king_in_check?(opponent)
-  end
-
-  def king_in_check?(opponent, check = false)
-    # Iterates through opponent's pieces.
-    opponent.pieces.each do |piece|
-      next if piece.position.nil?
-
-      king = @turn.pieces.select { |plyr_piece| plyr_piece.name == 'King' }
-                  .fetch(0)
-
-      # Returns true if the king's position is a valid destination.
-      next unless valid_dest?(king.position, @board, piece)
-
-      check = true
-    end
-
-    check
+    @turn.in_check = king_in_check?(@turn, opponent, @board)
   end
 
   def checkmate(opponent, pos = 'A1', checkmate = true)
@@ -62,10 +45,17 @@ class Game
       until pos == 'H8'
         # If pos is a valid destination, move the piece there and run check
         if valid_dest?(pos, @board, piece)
+          # If there is a piece at the destination temporarily sets its position to nil.
+          destination = find_piece(pos, @board.board)
+          destination.position = nil if destination.is_a?(GamePiece)
+
           piece.position = pos
 
           # Return false if check returns false
-          checkmate = false unless king_in_check?(opponent)
+          checkmate = false unless king_in_check?(@turn, opponent, @board)
+
+          # Resets the destination piece's position.
+          destination.position = pos if destination.is_a?(GamePiece)
         end
 
         piece.position = og_position

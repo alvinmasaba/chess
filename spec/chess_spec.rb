@@ -40,19 +40,24 @@ describe Game do
     context 'when King is in checkmate' do
       subject(:in_checkmate) { described_class.new }
 
-      it 'the game is finished' do
-        in_checkmate.turn.pieces.each do |piece|
+      before do
+        in_checkmate.player1.pieces.each do |piece|
           # Places white Queen at F2.
-          piece.position = 'F2' if piece.is_a?(Queen)
+          piece.position = 'f2' if piece.is_a?(Queen)
           # Places white bishop at C5.
-          piece.position = 'C5' if piece.position == 'F8'
+          piece.position = 'c5' if piece.position == 'F8'
         end
 
         in_checkmate.player2.pieces.each do |piece|
           # Moves pawn at E2.
-          piece.position = 'E4' if piece.position == 'E2'
+          piece.position = 'e4' if piece.position == 'E2'
+          piece.position = 'D1' if piece.is_a?(Queen)
         end
+      end
 
+      it 'the game is finished' do
+
+        in_checkmate.board.display_board
         # Changes turn as checkmate runs after turn completion.
         in_checkmate.turn = in_checkmate.player2
 
@@ -83,13 +88,6 @@ describe Game do
       end
     end
   end
-end
-
-describe Player do
-  subject(:player_move) { described_class.new('Player 1', :white) }
-  let(:game_board) { instance_double(GameBoard) }
-  let(:player_piece) { instance_double(GamePiece, color: :white) }
-  let(:opp_piece) { instance_double(GamePiece, color: :black) }
 end
 
 describe Pawn do

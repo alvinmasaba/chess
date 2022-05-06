@@ -12,6 +12,15 @@ module Helpers
     ALPHA_TO_NUM[string.downcase.to_sym]
   end
 
+  def convert_to_coordinates(pos)
+    return nil if pos.size != 2
+
+    x = pos[1].to_i - 1
+    y = convert_to_num(pos[0]) - 1
+
+    [x, y]
+  end
+
   def change_in_coordinates(pos, dest)
     return nil if invalid_sizes(pos, dest)
 
@@ -30,15 +39,6 @@ module Helpers
     pos.size != 2 || dest.size != 2
   end
 
-  def convert_to_coordinates(pos)
-    return nil if pos.size != 2
-
-    x = pos[1].to_i - 1
-    y = convert_to_num(pos[0]) - 1
-
-    [x, y]
-  end
-
   def enter_name(name)
     puts "\n#{name} please enter a name. Your name may be up to 10 chars max.\n\n"
     new_name = gets.chomp
@@ -50,11 +50,18 @@ module Helpers
     end
   end
 
-  def find_piece(position, board)
+  def find_piece(position, board, val = EMPTY_SQUARE)
     # If the string entered is in the format '[letter][integer]', convert
     # to corresponding index in gameboard array. E.g. 'A1' == [0][0].
-    coord = convert_to_coordinates(position)
-    board[coord[0]][coord[1]]
+    board.each do |row|
+      row.each do |piece|
+        next unless piece.is_a?(GamePiece) && !piece.position.nil?
+
+        val = piece if piece.position.downcase == position.downcase
+      end
+    end
+
+    val
   end
 
   def valid_pos?(pos)
@@ -73,6 +80,7 @@ module Helpers
 
     # Return false unless destination is empty or contains an opp piece.
     val = find_piece(dest, board.board)
+
     return false unless val == "\u0020" || val.color != selected_piece.color
 
     return true if selected_piece.can_jump
@@ -203,5 +211,22 @@ module Helpers
     end
 
     obstructed
+  end
+
+  def king_in_check?(player, opponent, board, check = false)
+    king = player.pieces.select { |plyr_piece| plyr_piece.name == 'King' }
+                 .fetch(0)
+
+    # Iterates through opponent's pieces.
+    opponent.pieces.each do |piece|
+      next if piece.position.nil?
+
+      # Returns true if the king's position is a valid destination.
+      next unless valid_dest?(king.position, board, piece)
+
+      check = true
+    end
+
+    check
   end
 end

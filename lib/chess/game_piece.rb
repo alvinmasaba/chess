@@ -26,7 +26,7 @@ class GamePiece
   end
 
   def change_position(new_position)
-    @position = new_position
+    @position = new_position.downcase
   end
 end
 

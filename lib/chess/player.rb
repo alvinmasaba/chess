@@ -66,7 +66,7 @@ class Player
 
       # Change the piece's position and then check if the king is still in check.
       @selected_piece.change_position(destination)
-      check(opponent)
+      king_in_check?(self, opponent, @board)
 
       # Revert the piece's position if still in check.
       @selected_piece.change_position(old_position)
